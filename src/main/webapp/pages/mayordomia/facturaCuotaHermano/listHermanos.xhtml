@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de pagos de hermanos" styleClass="pageTitle" />
+			
+			<p:fieldset legend="Generar cuotas anuales">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="anyoFilter" value="Año" />
+	        		<p:inputText id="anyoFilter" value="#{facturaCuotaHermanoBean.anyoGeneracionCuotas}" maxlength="4"
+	        			converterMessage="Debe introducir un número de año correcto">
+	        			 <f:validateDoubleRange minimum="1500" />
+	        		</p:inputText>
+	        		<p:message for="anyoFilter" display="text" />
+	        		
+	        		<p:commandLink onclick="confirmation.show()">
+	        			<f:setPropertyActionListener value="-1" 
+								target="#{facturaCuotaHermanoBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/page_add.png" 
+							alt="Generar cuotas anuales para hermanos seleccionados"
+							title="Generar cuotas anuales para hermanos seleccionados" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de generar las cuotas para el año seleccionado?"  
+						header="Generacion de cuotas" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:listTable" 
+				        		oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                action="#{facturaCuotaHermanoBean.doGenerarCuotasAnuales}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+				    <p:commandLink onclick="confirmation.show()">
+	        			<f:setPropertyActionListener value="-1" 
+								target="#{facturaCuotaHermanoBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/page_delete.png" 
+							alt="Eliminar cuotas anuales para hermanos seleccionados"
+							title="Eliminar cuotas anuales para hermanos seleccionados" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de eliminar las cuotas para el año seleccionado?"  
+						header="Eliminación de cuotas" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:listTable" 
+				        		oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                action="#{facturaCuotaHermanoBean.doEliminarCuotasAnuales}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+				</h:panelGroup>
+        	</p:fieldset>
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="nombreFilter" value="Nombre" />
+	        		<p:inputText id="nombreFilter" value="#{facturaCuotaHermanoBean.hermanoFilter.nombre}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{facturaCuotaHermanoBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Limpiar" action="#{facturaCuotaHermanoBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{facturaCuotaHermanoBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listTable" var="hermano" value="#{facturaCuotaHermanoBean.listHermano}" 
+				paginator="true" rows="10" emptyMessage="#{facturaCuotaHermanoBean.emptyMessage}"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Generar cuota anual" />
+	        			<h:selectBooleanCheckbox value="#{facturaCuotaHermanoBean.checkAllGenerarCuotas}">
+        						<p:ajax listener="#{facturaCuotaHermanoBean.selectAllGenerarCuotas}" update="listTable"/>
+        				</h:selectBooleanCheckbox>
+	        		</f:facet>
+					<h:selectBooleanCheckbox value="#{hermano.generarCuotaAnual}" />
+	        	</p:column>
+				
+				<p:column sortBy="numHermano">
+	        		<f:facet name="header">
+	        			<h:outputText value="Numero de hermano" />
+	        		</f:facet>
+					<h:outputText value="#{hermano.numHermano}" />
+	        	</p:column>
+				
+				<p:column sortBy="nombre">
+	        		<f:facet name="header">
+	        			<h:outputText value="Nombre" />
+	        		</f:facet>
+					<h:outputText value="#{hermano.nombre} #{hermano.apellidos}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="nif">
+	        		<f:facet name="header">
+	        			<h:outputText value="Nif" />
+	        		</f:facet>
+					<h:outputText value="#{hermano.nif}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="cuotaPagada">
+	        		<f:facet name="header">
+	        			<h:outputText value="Cuotas pagadas" />
+	        		</f:facet>
+	        		<h:outputText value="Sin facturas generadas" rendered="#{empty hermano.cuotaPagada}" />
+	        		<h:graphicImage value="/resources/img/icons/ok.png" rendered="#{not empty hermano.cuotaPagada and hermano.cuotaPagada}" />
+	        		<h:graphicImage value="/resources/img/icons/error.png" rendered="#{not empty hermano.cuotaPagada and not hermano.cuotaPagada}" />
+	        	</p:column>
+	        	
+	        	<!-- Actions -->
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{facturaCuotaHermanoBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{hermano.id}" />
+						<f:param name="edition" value="edition" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()">
+						<f:setPropertyActionListener value="#{rowIndex}" 
+								target="#{facturaCuotaHermanoBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/page_add.png" alt="Generar cuotas anuales"
+							title="Generar cuotas anuales" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de generar las cuotas de este hermano para el año seleccionado?"  
+						header="Generación de cuotas" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:listTable"
+				        		oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                action="#{facturaCuotaHermanoBean.doGenerarCuotasAnuales}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+				    <p:commandLink onclick="confirmationDelete.show()">
+	        			<f:setPropertyActionListener value="#{rowIndex}" 
+								target="#{facturaCuotaHermanoBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/page_delete.png" alt="Eliminar cuotas anuales"
+							title="Eliminar cuotas anuales" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de eliminar las cuotas para el año seleccionado?"  
+						header="Eliminación de cuotas" severity="alert" widgetVar="confirmationDelete"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:listTable" 
+				        		oncomplete="confirmationDelete.hide();$('.ui-widget-overlay').remove();"
+				                action="#{facturaCuotaHermanoBean.doEliminarCuotasAnuales}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmationDelete.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty facturaCuotaHermanoBean.listHermano}">  
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="hermano"/>  
+		        </h:commandLink>
+		        
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="hermano" />  
+		        </h:commandLink>
+		          
+		        <!-- <h:commandLink>  
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="hermano" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="hermano" />  
+		        </h:commandLink> -->
+		    </h:panelGroup>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

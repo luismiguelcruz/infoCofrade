@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm">
+			<p:fieldset id="element" legend="User detail">
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="name" value="Nombre" />
+		       		<p:inputText id="name" value="#{userBean.user.name}" required="true" />
+		       		<p:message for="name" display="text" /> 
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="surname" value="Apellidos" />
+		       		<p:inputText id="surname" value="#{userBean.user.surname}" required="true" />
+		       		<p:message for="surname" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="dni" value="Dni" />
+		       		<p:inputText id="dni" value="#{userBean.user.dni}" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="email" value="Email" />
+		       		<p:inputText id="email" value="#{userBean.user.email}" required="true" validatorMessage="Invalid email format">
+		       			<f:validateRegex pattern="([\w\-\.]+)@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([\w\-]+\.)+)([a-zA-Z]{2,4}))" />
+		       		</p:inputText>
+		       		<p:message for="email" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+					<h:outputLabel for="username" value="Nombre de usuario" />
+					<h:outputLabel for="username" value="*" styleClass="requiredLabel" />
+	        		<h:inputText id="username" value="#{userBean.user.username}" required="true" />
+	        		<h:message for="username" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">                     
+		            <p:outputLabel for="password" value="Password" />  
+		            <p:password id="password" value="#{userBean.user.md5Password}" match="confirmPassword" label="Password" required="true"/>  
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+					<p:outputLabel for="confirmPassword" value="Confirmar Password" />  
+					<p:password id="confirmPassword" value="#{userBean.user.md5Password}" label="confirmPassword" required="true"/>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="idUserType" value="Tipo de usuario" />
+		       		<p:selectOneMenu id="idUserType" value="#{userBean.user.idUserType}" effect="fade" required="true">  
+						<f:selectItem itemLabel="Select One" itemValue="" />  
+						<f:selectItems value="#{userBean.listUserType}" var="userType" itemLabel="#{userType.type}" itemValue="#{userType.id}"/>  
+					</p:selectOneMenu>
+					<p:message for="idUserType" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="phone" value="Teléfono" />
+		       		<p:inputText id="phone" value="#{userBean.user.phone}" required="false"></p:inputText>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" rendered="#{loginBean.isUserLogged and loginBean.loggedUser.id eq -1}">
+		       		<p:outputLabel for="lastLogin" value="Fecha de último acceso" />
+		       		<p:calendar id="lastLogin" value="#{userBean.user.lastLogin}" 
+		       				pattern="#{userBean.dateFormat}" disabled="true" />
+		       		<p:message for="lastLogin" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="initDate" value="Fecha de Alta" />
+		       		<p:calendar id="initDate" value="#{userBean.user.initDate}" 
+		       				pattern="#{userBean.dateFormat}" required="true"
+		       				maxdate="#{correspondenciaBean.today}" requiredMessage="Este campo es obligatorio"
+	       					showButtonPanel="true" navigator="true"  />
+		       		<p:message for="initDate" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="endDate" value="Fecha de baja" />
+		       		<p:calendar id="endDate" value="#{userBean.user.endDate}" 
+		       				pattern="#{userBean.dateFormat}" required="false" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<p:outputLabel for="idHermandad" value="Hermandad" />
+		       		<p:selectOneMenu id="idHermandad" value="#{userBean.user.idHermandad}" effect="fade">  
+						<f:selectItem itemLabel="Seleccionar" itemValue="" />  
+						<f:selectItems value="#{hermandadBean.listHermandad}" var="hermandad" 
+								itemLabel="#{hermandad.nombreCorto}" itemValue="#{hermandad.id}"/>  
+					</p:selectOneMenu>
+					<p:message for="idHermandad" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:commandLink action="#{userBean.doCreateElement}" value="Save" update="element" />
+			<p:commandLink action="#{userBean.doNavigate}" value="Back" immediate="true"/>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

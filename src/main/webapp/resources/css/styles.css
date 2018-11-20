@@ -1,0 +1,706 @@
+
+@charset "UTF-8";
+.clearfix:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+* html .clearfix {
+}
+:first-child + html .clearfix {
+}
+.clearnow {
+    clear: both;
+}
+body {
+    background-color: #fff;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    margin: 0;
+    min-width: 960px;
+    padding: 0;
+}
+div.wrapper {
+    height: 100%;
+    width: 100%;
+}
+div#content {
+    background-color: white;
+    clear: both;
+    margin: 40px auto 0;
+    padding-left: 200px;
+    width: 71%;
+}
+head {
+}
+img {
+    border: medium none;
+}
+a {
+    color: #205081;
+    text-decoration: none;
+}
+p:first-letter {
+    margin-left: 1.5em;
+}
+.ui-fieldset-legend {
+    border: medium none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 1) inset;
+    color: #fff !important;
+    font-weight: bold;
+    text-shadow: none !important;
+}
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+}
+.createElementLink {
+    display: block;
+    margin: 1em 0;
+}
+.parrafo {
+    text-align: justify;
+}
+.homeLink {
+    border: 1px solid;
+    display: block;
+    font-size: 20px;
+    font-weight: 300;
+    height: 22px;
+    left: 0;
+    line-height: 22px;
+    padding: 8px 0;
+    position: fixed;
+    top: 0;
+    width: 248px;
+    z-index: 100000;
+}
+.homeLink a {
+    font-weight: 800;
+    margin-left: 20px;
+}
+.homeLink a span {
+    font-weight: 100;
+}
+#header-section .tituloWeb {
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    margin-left: 25px;
+    margin-top: 30px;
+    width: 100%;
+}
+#header-section .imagenPortada {
+    display: block;
+    height: inherit;
+    margin: 0 auto;
+    width: auto;
+}
+#j_idt14 {
+    margin-left: 25px;
+    margin-top: 12px;
+    position: fixed;
+}
+#j_idt14 a {
+    font-size: 24px;
+    font-weight: bold;
+    position: fixed;
+}
+#loginForm\:j_idt43 {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #0072c6;
+    border-image: none;
+    border-radius: 0;
+    border-right: 2px solid #0072c6;
+    border-style: none solid solid;
+    border-width: medium 2px 2px;
+    box-shadow: none;
+    left: auto !important;
+    padding: 0;
+    right: 10px;
+    top: 40px !important;
+}
+#loginForm\:listTable_list {
+    float: left;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0 0 4px;
+    width: 168px;
+}
+#loginForm\:listTable_list > li {
+    float: left;
+}
+#loginForm\:listTable_content {
+    background: none repeat scroll 0 0 #ffffff;
+    border: medium none;
+    color: #4f4f4f;
+    padding: 0 !important;
+}
+#loginForm\:listTable_list > li a span {
+    border-color: #fff !important;
+    margin-bottom: 2px;
+    margin-right: 2px;
+}
+#loginForm {
+    border: medium none;
+    float: left;
+    height: 40px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.loginBlockDialog {
+    right: 0;
+    top: 40px;
+    width: 100%;
+    z-index: 3;
+}
+.loginBlockLogged {
+    float: right;
+    width: 250px;
+}
+.loginBlock .userName {
+    color: #7d7264;
+    display: block;
+    float: left;
+    font-size: 14px;
+    padding: 12px 0;
+    text-align: left;
+}
+.loginBlock .userSurname {
+    color: #7d7264;
+    display: block;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 12px 4px;
+    text-align: left;
+}
+.loginBlock .ArrowDown {
+    display: block;
+    float: left;
+    height: 10px;
+    padding: 15px 0;
+    text-align: left;
+    width: 10px;
+}
+.loginBlock .userImg {
+    background: none repeat scroll 0 0 #000;
+    display: block;
+    float: left;
+    height: 30px;
+    margin: 5px;
+    text-align: left;
+    width: 30px;
+}
+.loginBlock .userRol {
+    clear: both;
+    display: block;
+    text-align: right;
+    width: 100%;
+}
+.loginBlock .userVisitas {
+    clear: both;
+    display: block;
+    font-size: 10.5px;
+    text-align: right;
+    white-space: nowrap;
+    width: 100%;
+}
+.loginBlock .userVisitas span {
+    margin-left: 2%;
+}
+.loginActions {
+    float: right;
+    margin-top: 0.3em;
+}
+.loginActions a {
+    color: #000 !important;
+}
+.interfazImg {
+    height: 20px;
+    padding: 10px;
+    position: fixed;
+    right: 10px;
+    top: 0;
+    width: 20px;
+    z-index: 30;
+}
+.interfazImg:hover {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.24);
+}
+#loginForm\:loggedUserData {
+    float: right;
+    margin-right: 90px;
+    width: 162px;
+}
+
+
+
+.olaKase{
+	background-color: yellow;
+}
+
+.loggedUserData{
+	background-color: red;
+}
+
+.hermandadBlock {
+    border: medium none;
+    border-radius: 0;
+    height: 100px;
+    margin-top: 154px;
+    padding: 0;
+    position: fixed;
+    width: 250px;
+    z-index: 1;
+}
+.loggedUserNamePanel {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #0072c6;
+    border-image: none;
+    border-radius: 0;
+    border-right: 2px solid #0072c6;
+    border-style: none solid solid;
+    border-width: medium 2px 2px;
+    box-shadow: none;
+    left: auto !important;
+    padding: 0;
+    right: 90px !important;
+    top: 40px !important;
+    width: 80px;
+}
+div.menu {
+    border: medium none;
+    border-radius: 0;
+    height: 100%;
+    padding: 0;
+    position: fixed;
+    width: 200px;
+    z-index: 1;
+}
+.ui-menu .ui-menuitem-link {
+    height: 24px;
+    width: 96%;
+}
+div.menu ul {
+    margin: 0;
+    padding: 0;
+}
+div.menu ul li {
+    margin-left: 1.5em !important;
+}
+div.menu ul li a.ui-state-hover {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+div.menu ul li a.ui-state-hover span {
+    text-shadow: none;
+}
+div.menu ul li a span {
+    margin-left: 20px;
+    margin-top: 3px;
+    z-index: 9;
+}
+div.menu ul li a span:hover {
+    z-index: 9;
+}
+div.menu ul li ul li {
+    margin-left: 0 !important;
+}
+.ui-menu .ui-menu-list .ui-menuitem {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100%;
+}
+.ui-menubar .ui-menuitem-link {
+    font-size: 12px;
+    padding: 10px 18px 8px 15px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    width: 140px !important;
+}
+.ui-menu .ui-menu-parent .ui-menu-child {
+    border: 0 none;
+    padding: 0;
+    width: 250px;
+}
+#content {
+}
+.pageTitle {
+    color: #333;
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    width: 100%;
+}
+.pageSubTitle {
+    display: block;
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 1em;
+    margin-top: -1.5em;
+    text-align: center;
+    text-shadow: 3px 3px 3px #bbbbbb;
+    width: 100%;
+}
+#content .textTitle {
+    clear: both;
+    display: block;
+    font-size: large;
+    text-align: center;
+    width: 100%;
+}
+#content .formulario {
+    padding: 1.8em 5.5em;
+}
+.exportarListado {
+    float: right;
+    margin-right: 1em;
+}
+.exportarListado img {
+    margin: 0 0.3em;
+    width: 18px;
+}
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    padding: 0;
+}
+.ui-widget-content {
+    padding: 0 20px;
+}
+.alertas {
+    height: 40px;
+    position: fixed;
+    right: 50px;
+    top: 0;
+    width: 40px;
+    z-index: 30;
+}
+.alertas:hover {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.24);
+}
+.alertas img {
+    height: 20px;
+    margin: 10px;
+    width: 20px;
+}
+fieldset.ui-fieldset legend {
+    font-size: 12px;
+    padding: 0.6em 0.8em !important;
+}
+.editionFieldset {
+    margin: 0 auto;
+    width: 90%;
+}
+.editionElement {
+    margin-left: 3%;
+}
+.editionElement label {
+    display: block;
+    float: left;
+    width: inherit;
+}
+.editionElement label.requiredLabel {
+}
+.editionElement input, .editionElement textarea, .editionElement div.ui-selectonemenu {
+    clear: none;
+    display: block;
+    margin-left: 0;
+}
+.filterFieldsetShort {
+    float: left;
+    margin-left: 0.9%;
+    width: 46%;
+}
+.filterLeft {
+    float: left;
+    margin-left: 0.9%;
+    margin-top: 0.3em;
+    width: 48%;
+}
+.filterSubmit {
+    clear: both;
+    float: right;
+    width: auto;
+}
+.filterSubmit a {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 1) inset;
+    color: white;
+    display: block;
+    float: left;
+    margin-left: 0.8em;
+    margin-top: 0.8em;
+    padding: 0.6em 0.8em;
+    text-shadow: 0 -1px 0 rgba(13, 12, 13, 0.4), 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.filterFieldsetShort input {
+    float: left;
+    height: 0.9em;
+    margin-left: 0.3em;
+    width: 145px;
+}
+.filterFieldsetShort label {
+    display: block;
+    float: left;
+    margin-top: 0.5em;
+    width: 100px;
+}
+.imagenParrafoLeft {
+    float: left;
+    max-height: 170px;
+    max-width: 200px;
+    padding: 1%;
+}
+.imagenParrafoRight {
+    float: right;
+    max-height: 170px;
+    max-width: 200px;
+    padding: 1%;
+}
+.ui-row-toggler {
+    background-image: url("#{resource[\'img/icons:dropdown.png\']}");
+    float: left;
+    height: 16px;
+    width: 16px;
+}
+.ui-icon-circle-triangle-s {
+    background-image: url("#{resource[\'img/icons:collapse.png\']}");
+}
+.ui-datatable .ui-sortable-column {
+    padding: 9px 10px;
+}
+.ui-state-default {
+    box-shadow: none;
+}
+div.tableResults {
+    clear: both;
+    padding-top: 1.3em;
+}
+div.embebedTable {
+    padding: 1em 2em;
+}
+.actions {
+    clear: both;
+    padding: 0.6em 0.4em;
+}
+.actions a {
+    margin-left: 0.7em;
+}
+.hide-column-names table thead tr {
+    display: none;
+}
+.ui-datatable .ui-paginator, .ui-datatable .ui-paginator {
+    margin-bottom: 30px;
+    padding: 2px;
+}
+.ui-datatable tbody td {
+    padding: 7px 10px;
+}
+div.accionesListado {
+    background-image: url("../includes/img/icons/download_background.png");
+    background-repeat: repeat-x;
+    float: left;
+    margin-left: 5em;
+    padding: 0.2em 0.3em;
+    width: -moz-max-content;
+}
+.samplesInLane {
+    margin: 0;
+    padding: 0;
+}
+.samplesInLane div {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+}
+.editionForm {
+}
+.editionForm .editionItem {
+    clear: both;
+    padding: 0.5em 0;
+}
+.editionForm .editionItem label {
+    display: block;
+    float: left;
+    width: 20%;
+}
+.editionForm .editionItem input, .editionForm .editionItem textarea, .editionForm .editionItem .imageEditionItem {
+    clear: both;
+    display: block;
+    margin-left: 10%;
+    width: 65%;
+}
+.editionForm .editionItem div.wysiwyg {
+    clear: both;
+    display: block;
+    margin-left: 10%;
+    width: 65% !important;
+}
+.editionForm .editionItem span.counter {
+    clear: both;
+    display: block;
+    margin-left: 10%;
+}
+.editionForm .editionItem input.hasDatepicker {
+    width: inherit;
+}
+.editionForm .editionItem .uploadFileEditionItem {
+    clear: both;
+    margin-left: 10%;
+    margin-top: 1em;
+    width: 65%;
+}
+.memoriaAnual {
+    margin: 0 auto;
+    width: 80%;
+}
+.memoriaAnual div {
+    border: medium none !important;
+    margin: 0 !important;
+}
+.memoriaAnual fieldset div {
+    margin: 0;
+    padding: 0;
+}
+.memoriaAnual .nombreMes {
+    margin: 1em auto;
+    text-transform: capitalize;
+}
+.memoriaAnual .nombreMes dl dt {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+fieldset.actoMes {
+    float: left;
+    margin-left: 2%;
+    padding: 0.5em;
+    width: auto;
+}
+fieldset.actoMes .infoActo {
+    display: block;
+    width: 100%;
+}
+#footer {
+    bottom: 0;
+    clear: both;
+    font-size: x-small;
+    margin: 2em auto 0;
+    padding: 1em 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+}
+.creditos {
+    display: none;
+    padding: 1em;
+    text-align: left;
+}
+.creditos div {
+    clear: both;
+    margin: 0.3em auto;
+}
+.creditos div label {
+    display: block;
+    float: left;
+    width: 100px;
+}
+.creditos div span {
+    display: block;
+    float: left;
+    margin-left: 1em;
+    width: 120px;
+}
+.ui-fieldset-legend {
+    background: none repeat scroll 0 0 #205081 !important;
+}
+.ui-widget-content a {
+    color: #8da000;
+}
+.homeLink {
+    background: none repeat scroll 0 0 #d6d2cc;
+    border-color: #d6d2cc;
+}
+#header-section .tituloWeb {
+    color: #7d7264;
+}
+#j_idt14 a {
+    color: #7d7264;
+}
+#j_idt14 a:hover {
+    color: #948a7c;
+}
+#loginForm {
+    background: none repeat scroll 0 0 #0072c6;
+}
+.loginBlockDialog {
+    border: 1px solid #004b40;
+}
+.loginActions a {
+    color: #000 !important;
+}
+.imageLogin {
+    color: #fff;
+}
+.hermandadBlock {
+    background: none repeat scroll 0 0 #f0f0f0;
+}
+div.menu {
+    background: none repeat scroll 0 0 #f0f0f0;
+}
+div.menu ul li a.ui-state-hover {
+    background: none repeat scroll 0 0 rgba(125, 114, 100, 0.07) !important;
+    color: #7d7264;
+}
+div.menu ul li a.ui-state-hover span {
+    color: #7d7264 !important;
+}
+div.menu ul li a span {
+    color: #7d7264;
+}
+div.menu ul li a span:hover {
+    color: #7d7264;
+}
+.ui-menubar .ui-menuitem-link {
+    color: #7d7264;
+}
+.pageSubTitle {
+    color: #8c6900;
+}
+.filterSubmit a {
+    background: none repeat scroll 0 0 #205081;
+}
+.ui-datatable .ui-sortable-column {
+    background: none repeat scroll 0 0 #d6d2cc;
+}
+.ui-datatable .ui-sortable-column:hover {
+    background: none repeat scroll 0 0 #a8a8a8;
+}
+.ui-datatable thead th, .ui-datatable tfoot td {
+    background: none repeat scroll 0 0 #d6d2cc;
+}
+.ui-datatable .ui-paginator, .ui-datatable .ui-paginator {
+    background: none repeat scroll 0 0 #f3f3f3;
+}
+.ui-datatable tbody td {
+    border-color: #c3c0bb;
+}
+.memoriaAnual .nombreMes dl dt {
+    background-color: red;
+}
+.creditos {
+    background-color: #dfdfdf;
+}
+.homeLink a {
+    color: #61584d;
+}

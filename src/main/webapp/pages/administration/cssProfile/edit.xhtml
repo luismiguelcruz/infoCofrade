@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de ficheros css de perfil" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Fichero css de perfil">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="color" value="Color" />
+		       		<p:inputText id="color" value="#{cssProfileBean.cssProfile.color}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="color" display="text" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="urlPath" value="Ruta" />
+		       		<p:inputText id="urlPath" value="#{cssProfileBean.cssProfile.urlPath}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="urlPath" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{cssProfileBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{cssProfileBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

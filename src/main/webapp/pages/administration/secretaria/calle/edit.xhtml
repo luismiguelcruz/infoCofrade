@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de calles" styleClass="pageTitle" />
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="idTipoVia" value="Tipo de vía" />
+	       		<h:selectOneMenu id="idTipoVia" value="#{calleBean.calle.idTipoVia}"
+	       				requiredMessage="Este campo es obligatorio" required="true">  
+					<f:selectItem itemLabel="-- Seleccionar tipo de via --" itemValue="" />  
+					<f:selectItems value="#{tipoViaBean.listTipoVia}" var="tipoVia"
+							itemLabel="#{tipoVia.nombre}" itemValue="#{tipoVia.id}"/>  
+				</h:selectOneMenu>
+				<p:message for="idTipoVia" display="text" />
+			</p:outputPanel>
+		
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="nombreVia" value="Nombre de la vía" />
+	       		<p:inputText id="nombreVia" value="#{calleBean.calle.nombreVia}"
+	       			requiredMessage="Este campo es obligatorio" />
+				<p:message for="nombreVia" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="numKmMinimo" value="Num/KM mínimo" />
+	       		<p:inputText id="numKmMinimo" value="#{calleBean.calle.numKmMinimo}"
+	       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+				<p:message for="numKmMinimo" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="numKmMaximo" value="Num/KM máximo" />
+	       		<p:inputText id="numKmMaximo" value="#{calleBean.calle.numKmMaximo}"
+	       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+				<p:message for="numKmMaximo" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="idLocalidad" value="Localidad" />
+	       		<p:autoComplete id="idLocalidad" value="#{calleBean.localidadSelected}"
+					completeMethod="#{calleBean.doAutoComplete}" minQueryLength="3"
+					var="localidad" itemLabel="#{localidad.localidad}" 
+					itemValue="#{localidad.id}" converter="#{localidadConverter}">
+					<f:attribute name="filter" value="localidad" />
+					<p:ajax listener="#{calleBean.loadAddressFields}" 
+							event="itemSelect" update="provincia, codigoPostal" />
+	                <p:column>  
+	                    #{localidad.localidad} (#{localidad.codigoPostal})
+	                </p:column>
+				</p:autoComplete>
+				<p:message for="idLocalidad" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="provincia" value="Provincia" />
+	       		<p:inputText id="provincia" value="#{calleBean.calle.provincia}" disabled="true" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="codigoPostal" value="Código postal" />
+	       		<p:autoComplete id="codigoPostal" value="#{calleBean.localidadCPSelected}"
+					completeMethod="#{calleBean.doAutoComplete}" minQueryLength="5"
+					var="localidad" itemLabel="#{localidad.codigoPostal}" 
+					itemValue="#{localidad.id}" converter="#{codigoPostalConverter}">
+					<f:attribute name="filter" value="codigoPostal" />
+					<p:ajax listener="#{calleBean.loadAddressFields}" 
+							event="itemSelect" update="idLocalidad, provincia" />
+					<p:column>  
+	                    #{localidad.codigoPostal}  (#{localidad.localidad})
+	                </p:column>
+				</p:autoComplete>
+				<p:message for="codigoPostal" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<h:outputLabel for="sector" value="Sector" />
+	       		<h:selectOneMenu id="sector" value="#{calleBean.calle.idSector}">  
+					<f:selectItem itemLabel="-- Seleccionar sector --" itemValue="" />  
+					<f:selectItems value="#{sectorBean.listSector}" var="sector"
+							itemLabel="#{sector.nombre}" itemValue="#{sector.id}"/>  
+				</h:selectOneMenu>
+				<h:message for="sector" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="editionElement">
+	       		<p:outputLabel for="encargado" value="Encargado de reparto" />
+	       		<p:inputText id="encargado" value="#{calleBean.calle.encargado}"
+	       			requiredMessage="Este campo es obligatorio" />
+				<p:message for="encargado" display="text" />
+			</p:outputPanel>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{calleBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{calleBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

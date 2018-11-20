@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de cuenta" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Cuenta">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idCuentaPadre" value="Cuenta padre" />
+		       		<h:outputText id="idCuentaPadre" value="#{cuentaBean.cuenta.idCuentaPadre}"
+		       				converter="#{cuentaConverter}" 
+		       				requiredMessage="Este campo es obligatorio" />
+					<p:message for="idCuentaPadre" display="text" />
+					
+					<p:commandLink id="idCuentaPadreLink" action="#{cuentaBean.loadEmbeddedList}"
+							type="button" process="idCuentaPadre">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<p:commandLink action="#{cuentaBean.clearIdCuentaPadre}" update=":editionForm">
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar cuenta padre"/>
+					</p:commandLink>
+						
+					<p:overlayPanel id="idCuentaPadrePanel" for="idCuentaPadreLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right top">
+						<p:dataTable id="listTableCuentas" var="cuenta" onExpandStart="false"
+								value="#{cuentaBean.listSearchCuenta}"
+								paginator="true" rows="10"
+								paginatorPosition="bottom"
+								filteredValue="#{cuentaBean.listFilteredCuentas}">  
+				            <p:column filterBy="nombre" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Nombre" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.nombre}" />
+				        	</p:column>
+				        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Tipo actividad" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.idTipoActividad}" converter="#{tipoActividadConverter}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{cuentaBean.doSelectCuentaPadre}" 
+										title="Seleccionar cuenta padre" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{cuenta.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombre" value="Nombre de la cuenta" />
+		       		<p:inputText id="nombre" value="#{cuentaBean.cuenta.nombre}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" />
+					<p:message for="nombre" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="numeroCuenta" value="Número de cuenta" />
+		       		<p:inputText id="numeroCuenta" value="#{cuentaBean.cuenta.numeroCuenta}" 
+		       				requiredMessage="Este campo es obligatorio" />
+					<p:message for="numeroCuenta" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" rendered="#{empty cuentaBean.cuenta.idCuentaPadre}">
+		       		<h:outputLabel for="idTipoActividad" value="Tipo de actividad" />
+		       		<h:selectOneMenu id="idTipoActividad" value="#{cuentaBean.cuenta.idTipoActividad}">  
+						<f:selectItem itemLabel="-- Seleccionar tipo de actividad --" itemValue="" />  
+						<f:selectItems value="#{tipoActividadBean.listTipoActividad}" var="tipoActividad"
+								itemLabel="#{tipoActividad.nombre}" itemValue="#{tipoActividad.id}"/>
+					</h:selectOneMenu>
+					<h:message for="idTipoActividad" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="esConceptoFijo" value="¿Es un concepto anual fijo?" />
+		       		<h:selectBooleanCheckbox id="esConceptoFijo" value="#{cuentaBean.cuenta.esConceptoFijo}">
+		       			<p:ajax event="change" update=":editionForm" />
+		       		</h:selectBooleanCheckbox>
+					<h:message for="esConceptoFijo" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" 
+						rendered="#{not cuentaBean.cuenta.esConceptoFijo}">
+		       		<p:outputLabel for="anyo" value="Año de la cuenta" />
+		       		<p:inputText id="anyo" value="#{cuentaBean.cuenta.anyo}" 
+		       			required="true" requiredMessage="Este campo es obligatorio si el concepto no es fijo" />
+					<p:message for="anyo" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{cuentaBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{cuentaBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

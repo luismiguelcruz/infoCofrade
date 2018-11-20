@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de cuentas" styleClass="pageTitle" />
+		
+			<h:commandLink action="#{cuentaBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+			</h:commandLink>
+			
+			<p:fieldset legend="Seleccionar año para mostrar las cuentas">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="anyoFilter" value="Año" />
+	        		<p:inputText id="anyoFilter" value="#{cuentaBean.anyo}" maxlength="4"
+	        			converterMessage="Debe introducir un número de año correcto">
+	        			 <f:validateDoubleRange minimum="1500" />
+	        		</p:inputText>
+	        		<p:message for="anyoFilter" display="text" />
+	        		
+	        		<p:commandLink onclick="confirmationChangeYear.show()">
+						<h:outputText value="Cambiar año de cuentas" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de cambiar el año seleccionado?"  
+						header="Cambiar año seleccionado" severity="alert" widgetVar="confirmationChangeYear"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:treeTablePanel :listForm:treeTableResume" 
+				        		oncomplete="confirmationChangeYear.hide();$('.ui-widget-overlay').remove();"
+				                action="#{cuentaBean.doGenerarCuentasAnuales}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmationChangeYear.hide()"/>
+				    </p:confirmDialog>
+				</h:panelGroup>
+        	</p:fieldset>
+        	
+        	<p:outputPanel id="treeTablePanel">
+	        	<p:treeTable id="treetable" value="#{cuentaBean.listCuentaStructure}" var="lineaCuenta"
+	        		rendered="#{not empty cuentaBean.listCuentaStructure}">  
+			        <f:facet name="header">  
+			            <h:outputText value="Cuentas del año #{cuentaBean.anyo}" />
+			        </f:facet>  
+			  
+			        <p:column headerText="Nombre">
+			            <h:outputText value="#{lineaCuenta.nombre}" />
+			        </p:column>
+			  
+			        <p:column headerText="Gasto">
+			            <h:graphicImage value="/resources/img/icons/ok.png" rendered="#{lineaCuenta.gasto}" 
+			            	style="margin: 0 auto; display: block;" />
+			        </p:column>
+			  
+			        <p:column headerText="Ingreso">
+			            <h:graphicImage value="/resources/img/icons/ok.png" rendered="#{lineaCuenta.ingreso}" 
+			            	style="margin: 0 auto; display: block;" />
+			        </p:column>
+			        
+			        <p:column headerText="Saldo">
+			            <h:outputText value="#{lineaCuenta.saldo}" style="color: green;" 
+			            	rendered="#{lineaCuenta.saldo ge 0}" />
+			            <h:outputText value="#{lineaCuenta.saldo}" style="color: red;" 
+			            	rendered="#{lineaCuenta.saldo lt 0}" />
+			        </p:column>
+			        
+			        <!-- Acciones -->
+			        <p:column headerText="Acciones">
+			        	<!-- Acciones de cuenta -->
+			            <p:commandLink title="Ver detalle de la cuenta" 
+			            		action="#{cuentaBean.doEditElement}"
+			            		rendered="#{not empty lineaCuenta.idCuenta}">
+			            	<h:graphicImage value="/resources/img/icons/page_edit.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idCuenta}" />
+			                <f:param name="edition" value="true" />
+			            </p:commandLink>
+			            <p:commandLink title="Añadir subcuenta" 
+			            		action="#{cuentaBean.doAddSubcuenta}"
+			            		rendered="#{not empty lineaCuenta.idCuenta or
+			            		 (empty lineaCuenta.idCuenta and empty lineaCuenta.idGasto and empty lineaCuenta.idIngreso)}">
+			            	<h:graphicImage value="/resources/img/icons/add.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idCuenta}" />
+			                <f:param name="idTipoActividad" value="#{lineaCuenta.idTipoActividad}" />
+			                <f:param name="edition" value="true" />
+			            </p:commandLink>
+			            <p:commandLink title="Añadir ingreso a la cuenta" 
+			            		action="#{ingresoBean.doAddIngresoCuenta}"
+			            		rendered="#{not empty lineaCuenta.idCuenta}">
+			            	<h:graphicImage value="/resources/img/icons/coins_add.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idCuenta}" />
+			                <f:param name="anyo" value="#{cuentaBean.anyo}" />
+			                <f:param name="edition" value="true" />
+			                <f:param name="returnPage" value="#{cuentaBean.listPageName}" />
+			            </p:commandLink>
+			            <p:commandLink title="Añadir gasto a la cuenta" 
+			            		action="#{gastoBean.doAddGastoCuenta}"
+			            		rendered="#{not empty lineaCuenta.idCuenta}">
+			            	<h:graphicImage value="/resources/img/icons/coins_delete.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idCuenta}" />
+			                <f:param name="anyo" value="#{cuentaBean.anyo}" />
+			                <f:param name="edition" value="true" />
+			                <f:param name="returnPage" value="#{cuentaBean.listPageName}" />
+			            </p:commandLink>
+			            <p:commandLink onclick="confirmation.show()" 
+			            	title="Eliminar cuenta junto con sus gastos e ingresos"
+			            	rendered="#{not empty lineaCuenta.idCuenta}">
+							<f:setPropertyActionListener value="#{lineaCuenta.idCuenta}"
+								target="#{cuentaBean.selectedDeleteItemId}" />
+							<h:graphicImage value="/resources/img/icons/cross.png" />
+						</p:commandLink>
+						<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+							header="Delete Item" severity="alert" widgetVar="confirmation"
+							styleClass="confirmDialog">  
+					        <p:commandLink value="Sí" update=":listForm:treeTablePanel" 
+					        		oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+					                action="#{cuentaBean.doDeleteElement}">
+							</p:commandLink>
+					        <p:commandLink value="No" onclick="confirmation.hide()"/>
+					    </p:confirmDialog>
+			            
+			            <!-- Acciones de gasto -->
+			            <p:commandLink title="Ver detalle del gasto" 
+			            		action="#{gastoBean.doEditElement}"
+			            		rendered="#{not empty lineaCuenta.idGasto}">
+			            	<h:graphicImage value="/resources/img/icons/detalleCuantia.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idGasto}" />
+			                <f:param name="edition" value="editGasto" />
+			            </p:commandLink>
+			            <p:commandLink onclick="confirmationGasto.show()" 
+			            	title="Eliminar gasto"
+			            	rendered="#{not empty lineaCuenta.idGasto}">
+							<f:setPropertyActionListener value="#{lineaCuenta.idGasto}"
+								target="#{cuentaBean.selectedDeleteItemId}" />
+							<h:graphicImage value="/resources/img/icons/cross.png" />
+						</p:commandLink>
+						<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+							header="Delete Item" severity="alert" widgetVar="confirmationGasto"
+							styleClass="confirmDialog">  
+					        <p:commandLink value="Sí" update=":listForm:treeTablePanel" 
+					        		oncomplete="confirmationGasto.hide();$('.ui-widget-overlay').remove();"
+					                action="#{cuentaBean.doDeleteGasto}">
+							</p:commandLink>
+					        <p:commandLink value="No" onclick="confirmationGasto.hide()"/>
+					    </p:confirmDialog>
+					    
+					    <!-- Acciones de ingreso -->
+			            <p:commandLink title="Ver detalle del ingreso"
+			            		action="#{ingresoBean.doEditElement}" 
+			            		rendered="#{not empty lineaCuenta.idIngreso}">
+			            	<h:graphicImage value="/resources/img/icons/detalleCuantia.png" />
+			                <f:setPropertyActionListener value="#{lineaCuenta}"   
+			                    target="#{cuentaBean.selectedLineaCuenta}" />
+			                <f:param name="id" value="#{lineaCuenta.idIngreso}" />
+			                <f:param name="edition" value="editIngreso" />
+			            </p:commandLink>
+			            <p:commandLink onclick="confirmationIngreso.show()" 
+			            	title="Eliminar ingreso"
+			            	rendered="#{not empty lineaCuenta.idIngreso}">
+							<f:setPropertyActionListener value="#{lineaCuenta.idIngreso}"
+								target="#{cuentaBean.selectedDeleteItemId}" />
+							<h:graphicImage value="/resources/img/icons/cross.png" />
+						</p:commandLink>
+						<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+							header="Delete Item" severity="alert" widgetVar="confirmationIngreso"
+							styleClass="confirmDialog">  
+					        <p:commandLink value="Sí" update=":listForm:treeTablePanel" 
+					        		oncomplete="confirmationIngreso.hide();$('.ui-widget-overlay').remove();"
+					                action="#{cuentaBean.doDeleteIngreso}">
+							</p:commandLink>
+					        <p:commandLink value="No" onclick="confirmationIngreso.hide()"/>
+					    </p:confirmDialog>
+			        </p:column>
+			    </p:treeTable>
+		    </p:outputPanel>
+		    
+		    <p:outputPanel id="treeTableResume">
+			    <h:outputLabel for="balanceAnual" value="Balance Anual" 
+			    		rendered="#{cuentaBean.balanceAnual ge 0}" />
+			    <h:outputText id="balanceAnual" value="#{cuentaBean.balanceAnual}" style="color: green;" 
+			            rendered="#{cuentaBean.balanceAnual ge 0}" />
+			    
+			    <h:outputLabel for="balanceAnualNegativo" value="Balance Anual" 
+			    		rendered="#{cuentaBean.balanceAnual lt 0}" />
+			    <h:outputText id="balanceAnualNegativo" value="#{cuentaBean.balanceAnual}" style="color: red;" 
+			            rendered="#{cuentaBean.balanceAnual lt 0}" />
+		    </p:outputPanel>
+	        
+	        <!-- Table of elements -->
+	        <!-- <p:dataTable id="listTable" var="cuenta" value="#{cuentaBean.listCuenta}" 
+				paginator="true" rows="10"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column sortBy="nombre">
+	        		<f:facet name="header">
+	        			<h:outputText value="Nombre de la cuenta" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.nombre}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="numeroCuenta">
+	        		<f:facet name="header">
+	        			<h:outputText value="Número de cuenta" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.numeroCuenta}" />
+	        	</p:column>
+	        	
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Tipo de actividad" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.idTipoActividad}" converter="#{tipoActividadConverter}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="esConceptoFijo">
+	        		<f:facet name="header">
+	        			<h:outputText value="Es concepto fijo" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.esConceptoFijo}" converter="#{booleanConverter}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="anyo">
+	        		<f:facet name="header">
+	        			<h:outputText value="Año de la cuenta (si no es concepto fijo)" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.anyo}" />
+	        	</p:column>
+	        	
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Cuenta padre" />
+	        		</f:facet>
+					<h:outputText value="#{cuenta.idCuentaPadre}" converter="#{cuentaConverter}" />
+	        	</p:column>
+	        	
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{cuentaBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{cuenta.id}" />
+						<f:param name="edition" value="true" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar elemento">
+						<f:setPropertyActionListener value="#{cuenta.id}" target="#{cuentaBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">  
+				        <p:commandLink value="Sí" update=":listForm:listTable" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{cuentaBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable> -->
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty cuentaBean.listCuentaStructure}">  
+		        <!-- <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="cuenta"/>  
+		        </h:commandLink>
+		        
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="cuenta" />  
+		        </h:commandLink> -->
+
+		       <!-- <h:commandLink>
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="cuenta" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="cuenta" />  
+		        </h:commandLink> -->  
+		    </h:panelGroup>  
+	        
+	        <h:commandLink action="#{cuentaBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+	        </h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

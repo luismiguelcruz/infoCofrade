@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+
+
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" class="editionForm formulario">
+			<h:outputText value="Edicion de noticias" styleClass="pageTitle" />
+			
+			<p:fieldset id="element" styleClass="editionFieldset" legend="Datos del usuario">
+				<p:outputPanel id="imagePathGroup" layout="block" styleClass="editionItem">	       		
+		       		<p:outputPanel id="usuarioImagenBlock" layout="block" styleClass="imageEditionItem clearfix"
+		       				style="width: 70%;">
+		       			<p:fieldset legend="Imagen guardada" rendered="#{not empty noticiaBean.noticia.imagenNoticia}"
+		       					styleClass="usuarioImagenFieldset">
+		       				<p:commandLink action="#{noticiaBean.clearSavedImage}" title="Borrar imagen" 
+		       						styleClass="deleteImagen" update="usuarioImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							
+						    <p:graphicImage value="#{noticiaBean.imageInList}" styleClass="imagenNoticia" />
+						</p:fieldset>
+						
+						<p:fieldset legend="Nueva imagen" rendered="#{not empty noticiaBean.uploadedFile}" 
+								styleClass="usuarioImagenFieldset">
+							<p:commandLink action="#{noticiaBean.clearUploadedImage}" title="Borrar imagen" 
+									styleClass="deleteImagen" update="usuarioImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							<!-- <p:imageCropper value="#{imageCropperBean.croppedImage}"  
+	                   			image="#{loginBean.imageInListUploaded}"  
+	                   			initialCoords="10,10,50,50"/> -->
+	                   
+							<p:graphicImage value="#{noticiaBean.imageInListUploaded}" styleClass="imagenNoticia"
+									style="max-width: 100px;">
+							</p:graphicImage>
+						</p:fieldset>
+					</p:outputPanel>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="uploadFileEditionItem clearfix">
+		       		<h:outputLabel for="file" value="Imagen de la noticia" />
+		       		<h:graphicImage value="/resources/img/icons/help.png" />
+		       		<p:fileUpload id="file" mode="advanced" fileUploadListener="#{noticiaBean.uploadFile}"
+		       			update="imagePathGroup" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+		       		<h:message for="file" display="text" />
+	       		</p:outputPanel>
+			
+			<!-- <p:outputPanel id="imageStylePosition" layout="block" styleClass="editionItem">
+	       		<p:outputLabel for="imageStyle" value="Seleccionar posición de la foto" 
+	       			rendered="#{not empty noticiaBean.noticia.imagePath or not empty noticiaBean.uploadedFile}" />
+				<p:selectOneMenu id="imageStyle" value="#{noticiaBean.noticia.styleClass}" required="true"
+					rendered="#{not empty noticiaBean.noticia.imagePath or not empty noticiaBean.uploadedFile}">  
+		            <f:selectItem itemLabel="Select One" itemValue="" />
+                    <f:selectItem itemLabel="Alinear a la izquierda" itemValue="noticiaImageStyleLeft" /> 
+                    <f:selectItem itemLabel="Alinear a la derecha" itemValue="noticiaImageStyleRight" />
+                    <f:selectItem itemLabel="Centrar antes del texto" itemValue="noticiaImageStyleCenter" />  
+		        </p:selectOneMenu>  
+			</p:outputPanel> -->
+			
+				<p:outputPanel layout="block" styleClass="editionItem">
+		       		<p:outputLabel for="title">Titulo</p:outputLabel>
+		       		<p:inputText id="title" value="#{noticiaBean.noticia.titulo}" required="true" />
+		       		<p:message for="title" display="text" /> 
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionItem">
+		       		<p:outputLabel>Contenido</p:outputLabel>
+		       		<p:editor id="content" value="#{noticiaBean.noticia.contenido}" 
+		       			styleClass="wysiwyg" maxlength="5000" required="true" />
+		       		<h:outputText id="counter"/>
+		            <script type="text/javascript">
+		                var imax = 5000;
+		                function bindiframe(){
+		                    $('#fm\\:content').find('iframe').contents().find("body").on('keyup', function(e) {
+		                        ilength = $('#fm\\:content').find('iframe').contents().find("body").text().length;
+		                        $('#fm\\:counter').html('Remain:' + (imax - ilength));
+		                    });
+		                }
+		            </script>
+		       		<p:message for="content" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionItem">
+		       		<p:outputLabel for="date" style="width: inherit;">Fecha </p:outputLabel>
+		       		<p:calendar id="date" value="#{noticiaBean.noticia.fecha}" 
+		       				pattern="#{noticiaBean.dateTimeFormat}" required="true" />
+		       		<p:message for="date" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="actions">
+					<p:commandLink action="#{noticiaBean.doCreateElement}" value="Guardar" update="editionForm" />
+					<p:commandLink action="#{noticiaBean.doNavigate}" value="Volver" immediate="true"/>
+				</p:outputPanel>
+			</p:fieldset>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

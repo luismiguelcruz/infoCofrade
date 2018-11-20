@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.web.noticia.vo.NoticiaVO" table='"NOTICIA"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property column='"titulo"' name="titulo" type="java.lang.String" not-null="true" />
+		<property column='"contenido"' name="contenido" type="java.lang.String" not-null="true" />
+		<property column='"fecha"' name="fecha" type="java.util.Date" />
+		<property column='"imagenNoticia"' name="imagenNoticia" type="binary" />
+		<property column='"styleClass"' name="styleClass" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

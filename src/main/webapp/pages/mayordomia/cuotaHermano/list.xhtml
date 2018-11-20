@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de cuotas de hermano" styleClass="pageTitle" />
+		
+			<h:commandLink action="#{cuotaHermanoBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="edition" />
+			</h:commandLink>
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="edadMinimaFilter" value="Edad mínima" />
+	        		<p:inputText id="edadMinimaFilter" 
+	        			value="#{cuotaHermanoBean.cuotaHermanoFilter.edadMinima}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="edadMaximaFilter" value="Edad máxima" />
+	        		<p:inputText id="edadMaximaFilter" 
+	        			value="#{cuotaHermanoBean.cuotaHermanoFilter.edadMaxima}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{cuotaHermanoBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Limpiar" action="#{cuotaHermanoBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{cuotaHermanoBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listTable" var="cuotaHermano" value="#{cuotaHermanoBean.listCuotaHermano}" 
+				paginator="true" rows="10"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column sortBy="cuantia">
+	        		<f:facet name="header">
+	        			<h:outputText value="Cuantia" />
+	        		</f:facet>
+					<h:outputText value="#{cuotaHermano.cuantia} €" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="edadMinima">
+	        		<f:facet name="header">
+	        			<h:outputText value="Edad Mínima" />
+	        		</f:facet>
+					<h:outputText value="#{cuotaHermano.edadMinima}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="edadMaxima">
+	        		<f:facet name="header">
+	        			<h:outputText value="Edad Máxima" />
+	        		</f:facet>
+					<h:outputText value="#{cuotaHermano.edadMaxima}" />
+	        	</p:column>
+	        	
+	        	<!-- Actions -->
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{cuotaHermanoBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{cuotaHermano.id}" />
+						<f:param name="edition" value="edition" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar elemento">
+						<f:setPropertyActionListener value="#{cuotaHermano.id}" target="#{cuotaHermanoBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">
+				        <p:commandLink value="Sí" update=":listForm:listTable" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{cuotaHermanoBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty cuotaHermanoBean.listCuotaHermano}">
+				<h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="cuotaHermano"/>  
+		        </h:commandLink>
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="cuotaHermano" />  
+		        </h:commandLink>
+		          
+		        <!-- <h:commandLink>  
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="cuotaHermano" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="cuotaHermano" />  
+		        </h:commandLink> -->
+		    </h:panelGroup>  
+	        
+	        <h:commandLink action="#{cuotaHermanoBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="edition" />
+	        </h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

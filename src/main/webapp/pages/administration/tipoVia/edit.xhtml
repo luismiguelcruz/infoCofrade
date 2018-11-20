@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de métodos de pago" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Tipo de vía">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="sigla" value="Sigla" />
+		       		<p:inputText id="sigla" value="#{tipoViaBean.tipoVia.sigla}" required="true"
+		       			requiredMessage="Este campo es obligatorio" maxlength="3" />
+					<p:message for="sigla" display="text" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombre" value="Nombre" />
+		       		<p:inputText id="nombre" value="#{tipoViaBean.tipoVia.nombre}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="nombre" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{tipoViaBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{tipoViaBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

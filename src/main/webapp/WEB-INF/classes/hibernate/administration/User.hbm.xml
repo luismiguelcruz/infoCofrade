@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.administration.user.vo.UserVO" table='"USER"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="native" />
+		</id>
+		<property column='"name"' name="name" type="java.lang.String" length="100" not-null="false"/>
+		<property column='"surname"' name="surname" type="java.lang.String" length="250" not-null="false"/>
+		<property column='"dni"' name="dni" type="java.lang.String" length="15" not-null="false"/>
+		<property column='"email"' name="email" type="java.lang.String" length="300" not-null="false"/>
+		<property column='"idUserType"' name="idUserType" type="java.lang.Long" not-null="false"/>
+		<property column='"username"' name="username" type="java.lang.String" />
+		<property column='"password"' name="password" type="java.lang.String" not-null="true"/>
+		<property column='"phone"' name="phone" type="java.lang.String" length="50" not-null="false"/>
+		<property column='"lastLogin"' name="lastLogin" type="java.util.Date" not-null="false"/>
+		<property column='"initDate"' name="initDate" type="java.util.Date" not-null="false"/>
+		<property column='"endDate"' name="endDate" type="java.util.Date" not-null="false"/>
+		<property column='"isLogged"' name="isLogged" type="boolean" not-null="false"/>
+		<property column='"idHermandad"' name="idHermandad" type="java.lang.Long" />
+		<property column='"userImage"' name="userImage" type="binary" />
+		<property column='"idCssProfile"' name="idCssProfile" type="java.lang.Long" />
+	</class>
+</hibernate-mapping>

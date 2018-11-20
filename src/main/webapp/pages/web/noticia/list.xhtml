@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+
+
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="head">
+    	<script type="text/javascript">
+		</script>
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false" styleClass="formulario">
+			<h:outputText value="Noticias" styleClass="pageTitle" />
+			
+			<h:commandLink value="Crear noticia" action="#{noticiaBean.doEditElement}">
+				<f:param name="edition" value="edit" />
+			</h:commandLink>
+			
+			<p:dataList id="listTable" var="noticia" value="#{noticiaBean.listNoticia}" 
+				paginator="true" rows="10" rowIndexVar="rowIndex" styleClass="listNoticias"
+				rendered="#{not empty noticiaBean.listNoticia}"
+				paginatorAlwaysVisible="false"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="10,25,50,100" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:outputPanel styleClass="imagenNoticia">
+					<p:graphicImage value="#{noticiaBean.imageInList}" 
+							rendered="#{not empty noticia.imagenNoticia}">
+						<f:param name="index" value="#{rowIndex}" />
+					</p:graphicImage>
+				</p:outputPanel>
+				
+				<h:commandLink action="#{noticiaBean.doEditElement}" styleClass="textoNoticia">
+					<h:outputText value="#{noticia.titulo}" styleClass="titulo" />
+					<h:outputText value="#{noticia.fecha}" styleClass="fecha" >
+						<f:convertDateTime pattern="#{noticiaBean.dateFormat}" />
+					</h:outputText>
+					<p:outputPanel layout="block" styleClass="content">
+						<h:outputText value="#{noticia.resumen}" escape="true" />
+					</p:outputPanel>
+					<f:param name="id" value="#{noticia.id}" />
+					<f:param name="edition" value="edit" />
+				</h:commandLink>
+				
+				<!-- Actions -->
+	        	<p:outputPanel layout="block" styleClass="listActions clearfix" rendered="#{loginBean.isUserLogged}">
+	        		<p:commandLink action="#{noticiaBean.doEditElement}" title="Edit element">
+						<p:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{noticia.id}" />
+						<f:param name="edition" value="edit" />
+					</p:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Delete element">
+						<f:setPropertyActionListener value="#{noticia.id}" 
+								target="#{noticiaBean.selectedDeleteItemId}" />
+						<p:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar la noticia?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation">  
+				        <p:commandLink value="Sí" update=":listForm:listTable" 
+				        			oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{noticiaBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:outputPanel>
+	        	
+	        	<p:separator styleClass="separator" />
+	        </p:dataList>
+			
+			<h:commandLink value="Crear noticia" action="#{noticiaBean.doEditElement}">
+				<f:param name="edition" value="edit" />
+			</h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+ 	<context:component-scan base-package="com.infoCofrade" />
+ 	
+ 	<!-- Database Configuration -->
+ 	<!-- ><import resource="classes/config/spring/beans/DataSource.xml"/>
+	<import resource="classes/config/spring/beans/HibernateSessionFactory.xml"/>-->
+	
+	<!-- Beans Declaration -->
+	<!-- <import resource="classes/com/mgp/lims/user/spring/UserBean.xml"/>
+	<import resource="classes/com/mgp/lims/menuItem/spring/MenuItemBean.xml"/>-->
+ 
+ 	<!-- Seccion Administration -->
+ 	<bean id="ataqueSQLBO" class="com.infoCofrade.administration.ataqueSQL.bo.impl.AtaqueSQLBOImpl"></bean>
+ 	<bean id="calleBO" class="com.infoCofrade.administration.secretaria.calle.bo.impl.CalleBOImpl"></bean>
+ 	<bean id="calleViewBO" class="com.infoCofrade.administration.secretaria.calleView.bo.impl.CalleViewBOImpl"></bean>
+ 	<bean id="cssProfileBO" class="com.infoCofrade.administration.cssProfile.bo.impl.CssProfileBOImpl"></bean>
+ 	<bean id="dataBaseManageBO" class="com.infoCofrade.administration.dataBaseManage.bo.impl.DataBaseManageBOImpl"></bean>
+ 	<bean id="grupoBO" class="com.infoCofrade.administration.secretaria.grupo.bo.impl.GrupoBOImpl"></bean>
+ 	<bean id="hermandadBO" class="com.infoCofrade.administration.hermandad.bo.impl.HermandadBOImpl"></bean>
+ 	<bean id="localidadBO" class="com.infoCofrade.administration.localidad.bo.impl.LocalidadBOImpl"></bean>
+ 	<bean id="menuItemBO" class="com.infoCofrade.administration.menuItem.bo.impl.MenuItemBOImpl"></bean>
+ 	<bean id="metodoPagoBO" class="com.infoCofrade.administration.secretaria.metodoPago.bo.impl.MetodoPagoBOImpl"></bean>
+ 	<bean id="motivoBajaBO" class="com.infoCofrade.administration.secretaria.motivoBaja.bo.impl.MotivoBajaBOImpl"></bean>
+ 	<bean id="provinciaBO" class="com.infoCofrade.administration.provincia.bo.impl.ProvinciaBOImpl"></bean>
+ 	<bean id="sectorBO" class="com.infoCofrade.administration.secretaria.sector.bo.impl.SectorBOImpl"></bean>
+ 	<bean id="statusBO" class="com.infoCofrade.administration.secretaria.status.bo.impl.StatusBOImpl"></bean>
+ 	<bean id="paisBO" class="com.infoCofrade.administration.pais.bo.impl.PaisBOImpl"></bean>
+ 	<bean id="plazoPagoBO" class="com.infoCofrade.administration.tesoreria.plazoPago.bo.impl.PlazoPagoBOImpl"></bean>
+ 	<bean id="rolUrlPermissionBO" class="com.infoCofrade.administration.rolUrlPermission.bo.impl.RolUrlPermissionBOImpl"></bean>
+ 	<bean id="rolUrlPermissionViewBO" class="com.infoCofrade.administration.rolUrlPermissionView.bo.impl.RolUrlPermissionViewBOImpl"></bean>
+ 	<bean id="urlPermissionBO" class="com.infoCofrade.administration.urlPermission.bo.impl.UrlPermissionBOImpl"></bean>
+	<bean id="userBO" class="com.infoCofrade.administration.user.bo.impl.UserBOImpl"></bean>
+	<bean id="userViewBO" class="com.infoCofrade.administration.userView.bo.impl.UserViewBOImpl"></bean>
+	<bean id="userTypeBO" class="com.infoCofrade.administration.userType.bo.impl.UserTypeBOImpl"></bean>
+	<bean id="tipoViaBO" class="com.infoCofrade.administration.tipoVia.bo.impl.TipoViaBOImpl"></bean>
+	
+	<!-- Sección Mayordomía -->
+	<bean id="cuotaHermanoBO" class="com.infoCofrade.mayordomia.cuotaHermano.bo.impl.CuotaHermanoBOImpl"></bean>
+	<bean id="facturaCuotaHermanoBO" class="com.infoCofrade.mayordomia.facturaCuotaHermano.bo.impl.FacturaCuotaHermanoBOImpl"></bean>
+	
+	<!-- Sección Secretaría -->
+	<bean id="actoBO" class="com.infoCofrade.secretaria.acto.bo.impl.ActoBOImpl"></bean>
+	<bean id="correspondenciaBO" class="com.infoCofrade.secretaria.correspondencia.bo.impl.CorrespondenciaBOImpl"></bean>
+	<bean id="entidadBO" class="com.infoCofrade.secretaria.entidad.bo.impl.EntidadBOImpl"></bean>
+	<bean id="hermanoBO" class="com.infoCofrade.secretaria.hermano.bo.impl.HermanoBOImpl"></bean>
+	<bean id="statusPorHermanoBO" class="com.infoCofrade.secretaria.statusPorHermano.bo.impl.StatusPorHermanoBOImpl"></bean>
+	
+	<!-- Sección Tesorería -->
+	<bean id="cuentaBO" class="com.infoCofrade.tesoreria.cuenta.bo.impl.CuentaBOImpl"></bean>
+	<bean id="gastoBO" class="com.infoCofrade.tesoreria.gasto.bo.impl.GastoBOImpl"></bean>
+	<bean id="ingresoBO" class="com.infoCofrade.tesoreria.ingreso.bo.impl.IngresoBOImpl"></bean>
+	<bean id="tipoActividadBO" class="com.infoCofrade.tesoreria.tipoActividad.bo.impl.TipoActividadBOImpl"></bean>
+	
+	<!-- Sección Web -->
+	<bean id="noticiaBO" class="com.infoCofrade.web.noticia.bo.impl.NoticiaBOImpl"></bean>
+</beans>

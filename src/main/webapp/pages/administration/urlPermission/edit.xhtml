@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm">
+			<h:outputText value="Url permission edition" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Url Permission detail">
+				<p:outputPanel layout="block">
+		       		<h:outputLabel for="name" value="Name" />
+		       		<h:outputLabel for="name" value="*" styleClass="requiredLabel" />
+		       		<h:inputText id="name" value="#{urlPermissionBean.urlPermission.name}" required="true"/>
+		       		<h:message for="name" display="text" /> 
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<h:outputLabel for="url" value="Url" />
+		       		<h:outputLabel for="url" value="*" styleClass="requiredLabel" />
+		       		<h:inputText id="url" value="#{urlPermissionBean.urlPermission.url}" required="true"/>
+		       		<h:message for="url" display="text" /> 
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<h:outputLabel for="idMenuItemGroup" value="Menu Item Group" />
+		       		<h:selectOneMenu id="idMenuItemGroup" value="#{urlPermissionBean.urlPermission.idMenuItemGroup}">  
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{menuItemBean.listMenuItems}" var="menuItem" 
+							itemLabel="#{menuItem.itemName}" itemValue="#{menuItem.id}" />
+					</h:selectOneMenu>
+		       		<h:message for="idMenuItemGroup" display="text" /> 
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+		       		<h:outputLabel for="beanName" value="Bean name" />
+		       		<h:outputLabel for="beanName" value="*" styleClass="requiredLabel" />
+		       		<h:inputText id="beanName" value="#{urlPermissionBean.urlPermission.beanName}" />
+		       		<h:message for="beanName" display="text" /> 
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{urlPermissionBean.doCreateElement}" value="Save" />
+				<h:commandLink action="#{urlPermissionBean.doNavigate}" value="Back" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

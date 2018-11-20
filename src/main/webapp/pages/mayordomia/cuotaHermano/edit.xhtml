@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de cuota de hermano" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="CuotaHermano">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="cuantia" value="Cuantía" />
+		       		<p:inputText id="cuantia" value="#{cuotaHermanoBean.cuotaHermano.cuantia}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" />
+					<p:message for="cuantia" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="edadMinima" value="Edad mínima" />
+		       		<p:inputText id="edadMinima" value="#{cuotaHermanoBean.cuotaHermano.edadMinima}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" maxlength="3">
+		       			 <f:validateDoubleRange minimum="0" maximum="150" />  
+		       		</p:inputText>
+					<p:message for="edadMinima" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="edadMaxima" value="Edad máxima" />
+		       		<p:inputText id="edadMaxima" value="#{cuotaHermanoBean.cuotaHermano.edadMaxima}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" maxlength="3">
+		       			 <f:validateDoubleRange minimum="0" maximum="150" />  
+		       		</p:inputText>
+					<p:message for="edadMaxima" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idCuentaAsociada" value="Cuenta donde cargar los ingresos" />
+		       		<h:outputText id="idCuentaAsociada" value="#{cuotaHermanoBean.cuotaHermano.idCuenta}"
+		       				converter="#{cuentaConverter}" 
+		       				requiredMessage="Este campo es obligatorio" />
+					<p:message for="idCuentaAsociada" display="text" />
+					
+					<p:commandLink id="idCuentaAsociadaLink" action="#{cuotaHermanoBean.loadEmbeddedList}"
+							type="button" process="idCuentaAsociada">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<p:commandLink action="#{cuotaHermanoBean.clearIdCuentaAsociada}" update=":editionForm">
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar cuenta asociada"/>
+					</p:commandLink>
+						
+					<p:overlayPanel id="idCuentaAsociadaPanel" for="idCuentaAsociadaLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right top">
+						<p:dataTable id="listTableCuentas" var="cuenta" onExpandStart="false"
+								value="#{cuotaHermanoBean.listSearchCuenta}"
+								paginator="true" rows="10"
+								paginatorPosition="bottom"
+								filteredValue="#{cuotaHermanoBean.listFilteredCuentas}">  
+				            <p:column filterBy="nombre" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Nombre" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.nombre}" />
+				        	</p:column>
+				        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Tipo actividad" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.idTipoActividad}" converter="#{tipoActividadConverter}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{cuotaHermanoBean.doSelectCuentaAsociada}" 
+										title="Asociar esta cuenta a esta cuota de hermano" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{cuenta.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{cuotaHermanoBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{cuotaHermanoBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

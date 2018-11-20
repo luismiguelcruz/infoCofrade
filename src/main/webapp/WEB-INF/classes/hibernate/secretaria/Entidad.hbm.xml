@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.secretaria.entidad.vo.EntidadVO" table='"ENTIDAD"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property column='"idGrupo"' name="idGrupo" type="java.lang.Long" not-null="true"/>
+		<property column='"razonSocial"' name="razonSocial" type="java.lang.String" length="255" not-null="true"/>
+		<property column='"nombreCorto"' name="nombreCorto" type="java.lang.String" length="255" />
+		<property column='"cifNif"' name="cifNif" type="java.lang.String" length="100" />
+		<property column='"domicilio"' name="domicilio" type="java.lang.String" length="255" />
+		<property column='"idLocalidad"' name="idLocalidad" type="java.lang.Long" />
+		<property column='"telefono"' name="telefono" type="java.lang.String" length="15" />
+		<property column='"email"' name="email" type="java.lang.String" length="255" />
+		<property column='"personaContacto1"' name="personaContacto1" type="java.lang.String" length="255" />
+		<property column='"movilContacto1"' name="movilContacto1" type="java.lang.String" length="15" />
+		<property column='"personaContacto2"' name="personaContacto2" type="java.lang.String" length="255" />
+		<property column='"movilContacto2"' name="movilContacto2" type="java.lang.String" length="15" />
+		<property column='"observaciones"' name="observaciones" type="java.lang.String" length="2000" />
+	</class>
+</hibernate-mapping>

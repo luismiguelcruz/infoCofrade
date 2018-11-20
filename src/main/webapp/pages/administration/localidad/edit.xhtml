@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de localidad" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Localidad">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="provincia" value="Provincia" />
+					<h:outputText id="provincia" value="#{localidadBean.localidad.idProvincia}"
+							converter="#{provinciaConverter}" style="float: left; margin-left: 1em;" />
+					<h:message for="provincia" display="text" />
+				
+					<p:commandLink id="idProvinciaLink" action="#{localidadBean.loadEmbeddedList}"
+							type="button" process="provincia">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<h:commandLink action="#{localidadBean.clearIdProvincia}" >
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar provincia"/>
+					</h:commandLink>
+						
+					<p:overlayPanel id="idProvinciaPanel" for="idProvinciaLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right top">
+						<p:dataTable id="listTableProvincias" var="provincia" onExpandStart="false"
+								value="#{localidadBean.listSearchProvincia}" 
+								paginator="true" rows="10"
+								paginatorPosition="bottom"
+								filteredValue="#{localidadBean.listFilteredProvincias}">  
+				            <p:column filterBy="provincia" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Provincia" />
+				        		</f:facet>
+								<h:outputText value="#{provincia.provincia}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{localidadBean.doSelectProvincia}" 
+										title="Seleccionar provincia" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{provincia.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="localidad" value="Localidad" />
+		       		<p:inputText id="localidad" value="#{localidadBean.localidad.localidad}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="localidad" display="text" />
+				</p:outputPanel>
+
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="localidadSeo" value="Localidad seo" />
+		       		<p:inputText id="localidadSeo" value="#{localidadBean.localidad.localidadSeo}" 
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="localidadSeo" display="text" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostal" value="Código postal" />
+		       		<p:inputText id="codigoPostal" value="#{localidadBean.localidad.codigoPostal}"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="latitud" value="Latitud" />
+		       		<p:inputText id="latitud" value="#{localidadBean.localidad.latitud}" 
+		       			converterId="javax.faces.Double" converterMessage="Este campo debe contener un número" />
+					<p:message for="latitud" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="longitud" value="Latitud" />
+		       		<p:inputText id="longitud" value="#{localidadBean.localidad.longitud}" 
+		       			converterId="javax.faces.Double" converterMessage="Este campo debe contener un número" />
+					<p:message for="longitud" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{localidadBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{localidadBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

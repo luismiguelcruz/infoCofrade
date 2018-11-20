@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Baja de hermano" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Hermano">
+				<p:outputPanel layout="block" styleClass="editionElement"
+				 		rendered="#{not empty hermanoBean.hermano.id}">
+		       		<h:outputLabel for="numHermano" value="Número de hermano" />
+		       		<h:inputText id="numHermano" value="#{hermanoBean.hermano.numHermano}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" 
+						rendered="#{not empty hermanoBean.hermano.id}">
+		       		<h:outputLabel for="numIngreso" value="Número de ingreso" />
+		       		<h:inputText id="numIngreso" value="#{hermanoBean.hermano.numIngreso}" disabled="true" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="nombre" value="Nombre" />
+		       		<h:inputText id="nombre" value="#{hermanoBean.hermano.nombre}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="apellidos" value="Apellidos" />
+		       		<h:inputText id="apellidos" value="#{hermanoBean.hermano.apellidos}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="nif" value="Nif" />
+		       		<h:inputText id="nif" value="#{hermanoBean.hermano.nif}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaBaja" value="Fecha de baja" />
+		       		<p:calendar id="fechaBaja" value="#{hermanoBean.hermano.fechaBaja}" 
+	       				pattern="#{hermanoBean.dateTimeFormat}">
+	       				<p:ajax event="dateSelect" update="element" />  
+	       			</p:calendar>
+					<p:message for="fechaBaja" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" 
+						rendered="#{not empty hermanoBean.hermano.fechaBaja}">
+		       		<p:outputLabel for="motivoBaja" value="Motivo de la baja" />
+		       		<p:inputTextarea id="motivoBaja" rows="5" cols="30" counter="counter" maxlength="500"       
+						    counterTemplate="{0} caracteres restantes." autoResize="false"
+						    value="#{hermanoBean.hermano.motivoBaja}"
+						    required="true" requiredMessage="Este campo es obligatorio" />
+					<p:message for="motivoBaja" display="text" showSummary="false" />
+					<h:outputText id="counter" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{hermanoBean.doCancelElement}" value="Dar de baja" />
+				<h:commandLink action="#{hermanoBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

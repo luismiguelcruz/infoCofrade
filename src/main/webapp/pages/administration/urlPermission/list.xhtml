@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Url permission list" styleClass="pageTitle" />
+		
+ 	        <h:commandLink action="#{urlPermissionBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento" />
+			
+	        <p:fieldset id="filter" styleClass="filterList" legend="Filter Data">
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="urlFilter" value="Url" />
+	        		<h:inputText id="urlFilter" value="#{urlPermissionBean.urlPermissionSearch.url}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}"/>
+	        	</p:outputPanel>
+	        	
+	        	<p:outputPanel layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filter Data" action="#{urlPermissionBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Clear Filter" action="#{urlPermissionBean.doClearFilter}" update="listTable filter" />
+	        	</p:outputPanel>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{urlPermissionBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <p:dataTable id="listTable" var="urlPermission" value="#{urlPermissionBean.listUrlPermissions}" 
+				paginator="true" rows="10"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,20,50" paginatorPosition="bottom" draggableColumns="true">
+				
+	        	<p:column sortBy="name">
+	        		<f:facet name="header">
+	        			<h:outputText value="Name" />
+	        		</f:facet>
+					<h:outputText value="#{urlPermission.name}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="url">
+	        		<f:facet name="header">
+	        			<h:outputText value="Url" />
+	        		</f:facet>
+					<h:outputText value="#{urlPermission.url}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="idMenuItemGroup">
+	        		<f:facet name="header">
+	        			<h:outputText value="Menu Item Group" />
+	        		</f:facet>
+					<h:outputText value="#{urlPermission.idMenuItemGroup}" converter="#{menuItemConverter}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="beanName">
+	        		<f:facet name="header">
+	        			<h:outputText value="Bean Name" />
+	        		</f:facet>
+					<h:outputText value="#{urlPermission.beanName}" />
+	        	</p:column>
+	        	
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Actions" />
+	        		</f:facet>
+	        		<h:commandLink action="#{urlPermissionBean.doEditElement}" title="Editar element">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{urlPermission.id}" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar element">
+						<f:setPropertyActionListener value="#{urlPermission.id}" target="#{urlPermissionBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">  
+				        <p:commandLink value="Sí" update=":listForm" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{urlPermissionBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+	        <h:commandLink action="#{urlPermissionBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento" />
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

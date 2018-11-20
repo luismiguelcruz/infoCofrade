@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm">
+			<h:outputText value="Edición de pagos de cuotas de hermano" styleClass="pageTitle" />
+			
+			<p:fieldset legend="Datos del hermano">
+				<p:outputPanel layout="block">
+					<h:outputLabel for="name" value="Nombre" />
+					<h:outputText id="name" 
+						value="#{facturaCuotaHermanoBean.hermano.nombre} #{facturaCuotaHermanoBean.hermano.apellidos}" />
+				</p:outputPanel>
+				<p:outputPanel layout="block">
+					<h:outputLabel for="nif" value="Nif" />
+					<h:outputText id="nif" 
+						value="#{facturaCuotaHermanoBean.hermano.nif}" />
+				</p:outputPanel>
+				<p:outputPanel layout="block">
+					<h:outputLabel for="fechaSolicitud" value="Fecha de la solicitud" />
+					<h:outputText id="fechaSolicitud" value="#{facturaCuotaHermanoBean.hermano.fechaSolicitud}">
+						<f:convertDateTime pattern="#{facturaCuotaHermanoBean.dateTimeFormat}" />
+					</h:outputText>
+				</p:outputPanel>
+			</p:fieldset>
+		
+			<p:dataList id="listPagos" styleClass="olaKase" value="#{facturaCuotaHermanoBean.listFacturasAnualesDeHermano}"
+					var="listAnyo" itemType="none" rowIndexVar="item"
+       				rendered="#{fn:length(facturaCuotaHermanoBean.listFacturasAnualesDeHermano) gt 0}">
+       			<p:column>
+	       			<h:outputLabel value="Cambiar todo el año #{listAnyo[0].anyo}" />
+	       			<h:selectBooleanCheckbox 
+	       					rendered="#{fn:length(listAnyo) gt 0}"
+	       					valueChangeListener="#{facturaCuotaHermanoBean.actualizaCheckPagoHermanos}">
+	    				<p:ajax event="change" update=":editionForm:listPagos" process="@this" />
+						<f:attribute name="anyoParaCambiarPagos" value="#{listAnyo[0].anyo}" />
+	    			</h:selectBooleanCheckbox>
+	    			
+	       			<p:fieldset legend="#{listAnyo[0].anyo}">
+		       			<p:dataList value="#{listAnyo}"
+							var="facturaMes" itemType="none"
+		       				rendered="#{fn:length(listAnyo) gt 0}">
+		       				<p:column>
+			       				<h:panelGroup style="width: 10%; float: left; margin: 0 2px;">
+			       					<h:outputText value="#{facturaMes.nombreMes}" style="text-transform: capitalize;" />
+			       					<h:selectBooleanCheckbox value="#{facturaMes.pagada}" />
+			       				</h:panelGroup>
+		       				</p:column>
+		       			</p:dataList>
+	       			</p:fieldset>
+       			</p:column>
+       		</p:dataList>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{facturaCuotaHermanoBean.doCreateElement}" value="Guardar" immediate="true" />
+				<h:commandLink action="#{facturaCuotaHermanoBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

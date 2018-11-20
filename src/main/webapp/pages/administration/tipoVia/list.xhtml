@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de tipos de vía" styleClass="pageTitle" />
+		
+			<h:commandLink action="#{tipoViaBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+			</h:commandLink>
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="nombreFilter" value="Método" />
+	        		<p:inputText id="nombreFilter" value="#{tipoViaBean.tipoViaFilter.nombre}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{tipoViaBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Limpiar" action="#{tipoViaBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{tipoViaBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listTable" var="tipoVia" value="#{tipoViaBean.listTipoVia}" 
+				paginator="true" rows="10" editMode="cell"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column sortBy="sigla">
+	        		<f:facet name="header">
+	        			<h:outputText value="Sigla" />
+	        		</f:facet>
+					<h:outputText value="#{tipoVia.sigla}" />
+	        	</p:column>
+				
+				<p:column sortBy="nombre">
+	        		<f:facet name="header">
+	        			<h:outputText value="Nombre" />
+	        		</f:facet>
+					<h:outputText value="#{tipoVia.nombre}" />
+	        	</p:column>
+	        	
+	        	<!-- Actions -->
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{tipoViaBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{tipoVia.id}" />
+						<f:param name="edition" value="true" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar elemento">
+						<f:setPropertyActionListener value="#{tipoVia.id}" target="#{tipoViaBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">  
+				        <p:commandLink value="Sí" update=":listForm:listTable" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{tipoViaBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty tipoViaBean.listTipoVia}">  
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="tipoVia"/>  
+		        </h:commandLink>
+		        
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="tipoVia" />  
+		        </h:commandLink>
+		          
+		        <!-- <h:commandLink>  
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="tipoVia" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="tipoVia" />  
+		        </h:commandLink> --> 
+		    </h:panelGroup>  
+	        
+	        <h:commandLink action="#{tipoViaBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+	        </h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

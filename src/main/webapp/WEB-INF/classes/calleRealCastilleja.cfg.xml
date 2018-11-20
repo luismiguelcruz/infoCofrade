@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://10.243.135.100:3306/castilleja</property>
+        <property name="connection.username">luismi</property>
+        <property name="connection.password">luismi</property>
+        <property name="hibernate.default_schema">castilleja</property>
+                
+        <!-- <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/callerealcastilleja</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">admin</property>
+        <property name="hibernate.default_schema">callerealcastilleja</property> -->
+         
+        <!-- JDBC connection pool, use Hibernate internal connection pool -->
+        <property name="connection.pool_size">100</property>
+        
+		<!-- C3P0 Stuff -->
+		<property name="hibernate.c3p0.acquire_increment">3</property>
+		<property name="hibernate.c3p0.idle_test_period">14400</property>
+		<property name="hibernate.c3p0.timeout">25200</property>
+		<property name="hibernate.c3p0.max_size">15</property>
+		<property name="hibernate.c3p0.min_size">3</property>
+		<property name="hibernate.c3p0.max_statements">0</property>
+		<property name="hibernate.c3p0.preferredTestQuery">select 1;</property>
+        
+        <property name="hibernate.dbcp.initialSize">8</property>
+		<property name="hibernate.dbcp.maxActive">20</property>
+		<property name="hibernate.dbcp.maxIdle">20</property>
+		<property name="hibernate.dbcp.minIdle">0</property>
+ 
+        <!-- Defines the SQL dialect used in Hibernate application -->
+        <!-- <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property> -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+ 
+        <!-- Enable Hibernate automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+ 
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+ 
+        <!-- Display and format all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+ 
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">update</property>
+         
+        <!-- Mapping to hibernate mapping files -->
+        	<!-- Seccion Administration -->	
+        	<mapping resource="hibernate/administration/Localidad.hbm.xml"/>
+	        <mapping resource="hibernate/administration/Pais.hbm.xml"/>
+	        <mapping resource="hibernate/administration/Provincia.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/Calle.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/CalleView.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/Grupo.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/MetodoPago.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/MotivoBaja.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/Sector.hbm.xml"/>
+	        <mapping resource="hibernate/administration/secretaria/Status.hbm.xml"/>
+	        <mapping resource="hibernate/administration/tesoreria/PlazoPago.hbm.xml"/>
+	        <mapping resource="hibernate/administration/TipoVia.hbm.xml"/>
+	        
+	        <!-- Seccion Mayordomía -->
+	        <mapping resource="hibernate/mayordomia/CuotaHermano.hbm.xml"/>
+	        <mapping resource="hibernate/mayordomia/FacturaCuotaHermano.hbm.xml"/>
+	        
+	        <!-- Seccion Secretaría -->
+	        <mapping resource="hibernate/secretaria/Acto.hbm.xml"/>
+	        <mapping resource="hibernate/secretaria/Correspondencia.hbm.xml"/>
+	        <mapping resource="hibernate/secretaria/Entidad.hbm.xml"/>
+	        <mapping resource="hibernate/secretaria/Hermano.hbm.xml"/>
+	        <mapping resource="hibernate/secretaria/StatusPorHermano.hbm.xml"/>
+	        
+	        <!-- Seccion Tesorería -->
+	        <mapping resource="hibernate/tesoreria/Cuenta.hbm.xml"/>
+	        <mapping resource="hibernate/tesoreria/Gasto.hbm.xml"/>
+	        <mapping resource="hibernate/tesoreria/Ingreso.hbm.xml"/>
+	        <mapping resource="hibernate/tesoreria/TipoActividad.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de entidad" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Entidad">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="razonSocial" value="Razón social" />
+		       		<p:inputText id="razonSocial" value="#{entidadBean.entidad.razonSocial}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="razonSocial" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreCorto" value="Nombre corto" />
+		       		<p:inputText id="nombreCorto" value="#{entidadBean.entidad.nombreCorto}" />
+					<p:message for="nombreCorto" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="cifNif" value="Cif / Nif" />
+		       		<p:inputText id="cifNif" value="#{entidadBean.entidad.cifNif}"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="cifNif" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="idGrupo" value="Grupo" />
+		       		<h:selectOneMenu id="idGrupo" value="#{entidadBean.entidad.idGrupo}">  
+						<f:selectItem itemLabel="-- Seleccionar grupo --" itemValue="" />  
+						<f:selectItems value="#{grupoBean.listGrupo}" var="grupo"
+								itemLabel="#{grupo.nombre}" itemValue="#{grupo.id}"/>  
+					</h:selectOneMenu>
+					<h:message for="idGrupo" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="domicilio" value="Domicilio" />
+		       		<p:inputText id="domicilio" value="#{entidadBean.entidad.domicilio}" />
+					<p:message for="domicilio" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidad" value="Localidad" />
+		       		<p:autoComplete id="idLocalidad" value="#{entidadBean.localidadSelected}"
+						completeMethod="#{entidadBean.doAutoComplete}" minQueryLength="3"
+						var="localidad" itemLabel="#{localidad.localidad}" 
+						itemValue="#{localidad.id}" converter="#{localidadConverter}">
+						<f:attribute name="filter" value="localidad" />
+						<p:ajax listener="#{entidadBean.loadAddressFields}" 
+								event="itemSelect" update="provincia, codigoPostal" />
+		                <p:column>  
+		                    #{localidad.localidad} (#{localidad.codigoPostal})  
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="idLocalidad" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provincia" value="Provincia" />
+		       		<p:inputText id="provincia" value="#{entidadBean.entidad.provincia}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostal" value="Código postal" />
+		       		<p:autoComplete id="codigoPostal" value="#{entidadBean.localidadCPSelected}"
+						completeMethod="#{entidadBean.doAutoComplete}" minQueryLength="5"
+						var="localidad" itemLabel="#{localidad.codigoPostal}" 
+						itemValue="#{localidad.id}" converter="#{codigoPostalConverter}">
+						<f:attribute name="filter" value="codigoPostal" />
+						<p:ajax listener="#{entidadBean.loadAddressFields}" 
+								event="itemSelect" update="idLocalidad, provincia" />
+						<p:column>  
+		                    #{localidad.codigoPostal}  (#{localidad.localidad})
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="telefono" value="Telefono" />
+		       		<p:inputText id="telefono" value="#{entidadBean.entidad.telefono}" />
+					<p:message for="telefono" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="email" value="Email" />
+		       		<p:inputText id="email" value="#{entidadBean.entidad.email}" />
+					<p:message for="email" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="personaContacto1" value="Persona de contacto 1" />
+		       		<p:inputText id="personaContacto1" value="#{entidadBean.entidad.personaContacto1}" />
+					<p:message for="personaContacto1" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="movilContacto1" value="Movil persona contacto 1" />
+		       		<p:inputText id="movilContacto1" value="#{entidadBean.entidad.movilContacto1}" />
+					<p:message for="movilContacto1" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="personaContacto2" value="Persona de contacto 2" />
+		       		<p:inputText id="personaContacto2" value="#{entidadBean.entidad.personaContacto2}" />
+					<p:message for="personaContacto2" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="movilContacto2" value="Movil persona contacto 2" />
+		       		<p:inputText id="movilContacto2" value="#{entidadBean.entidad.movilContacto2}" />
+					<p:message for="movilContacto2" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="observaciones" value="Observaciones" />
+		       		<p:inputTextarea id="observaciones" rows="5" cols="30"
+		       			counter="counterObservaciones" maxlength="2000"       
+					    counterTemplate="{0} caracteres restantes." autoResize="false"
+					    value="#{entidadBean.entidad.observaciones}"
+					    requiredMessage="Este campo es obligatorio" />
+					<p:message for="observaciones" display="text" showSummary="false" />
+					<h:outputText id="counterObservaciones" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{entidadBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{entidadBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

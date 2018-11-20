@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.administration.secretaria.hermano.vo.HermanoVO" table='"HERMANO"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property column='"numHermano"' name="numHermano" type="java.lang.Long" not-null="true" />
+		<property column='"numIngreso"' name="numIngreso" type="java.lang.Long" not-null="true" />
+		<property column='"nombre"' name="nombre" type="java.lang.String" length="255" not-null="true" />
+		<property column='"apellidos"' name="apellidos" type="java.lang.String" length="255" not-null="true" />
+		<property column='"nif"' name="nif" type="java.lang.String" length="20" />
+		<property column='"direccion"' name="direccion" type="java.lang.String" length="300" />
+		<property column='"idLocalidad"' name="idLocalidad" type="java.lang.Long" />
+		<property column='"fechaNacimiento"' name="fechaNacimiento" type="java.util.Date" not-null="true" />
+		<property column='"telefonoFijo"' name="telefonoFijo" type="java.lang.String" length="20" />
+		<property column='"telefonoMovil"' name="telefonoMovil" type="java.lang.String" length="20" />
+		<property column='"email"' name="email" type="java.lang.String" length="255" />
+		<property column='"nombrePadre"' name="nombrePadre" type="java.lang.String" length="150" />
+		<property column='"nombreMadre"' name="nombreMadre" type="java.lang.String" length="150" />
+		<property column='"nombreTutor"' name="nombreTutor" type="java.lang.String" length="150" />
+		<property column='"lugarBautismo"' name="lugarBautismo" type="java.lang.String" length="255" />
+		<property column='"fechaBautismo"' name="fechaBautismo" type="java.util.Date" not-null="true" />
+		<property column='"profesion"' name="profesion" type="java.lang.String" length="150" />
+		<property column='"libro"' name="libro" type="java.lang.String" length="255" />
+		<property column='"fechaSolicitud"' name="fechaSolicitud" type="java.util.Date" not-null="true" />
+		<property column='"fechaJura"' name="fechaJura" type="java.util.Date" />
+		<property column='"fechaBaja"' name="fechaBaja" type="java.util.Date" />
+		<property column='"motivoBaja"' name="motivoBaja" type="java.lang.String" length="500" />
+		<property column='"idSector"' name="idSector" type="java.lang.Long" />
+		<property column='"direccionCobro"' name="direccionCobro" type="java.lang.String" length="300" />
+		<property column='"idLocalidadCobro"' name="idLocalidadCobro" type="java.lang.Long" />
+		<property column='"observaciones"' name="observaciones" type="java.lang.String" length="2000" />
+	</class>
+</hibernate-mapping>

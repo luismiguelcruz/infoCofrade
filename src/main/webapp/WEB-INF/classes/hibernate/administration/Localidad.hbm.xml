@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.administration.localidad.vo.LocalidadVO" table='"LOCALIDAD"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property column='"idProvincia"' name="idProvincia" type="java.lang.Long" />
+		<property column='"localidad"' name="localidad" type="java.lang.String" length="255" not-null="true" />
+		<property column='"localidadSeo"' name="localidadSeo" 
+				type="java.lang.String" length="255" />
+		<property column='"codigoPostal"' name="codigoPostal" type="java.lang.Integer" />
+		<property column='"latitud"' name="latitud" type="java.lang.Double" />
+		<property column='"longitud"' name="longitud" type="java.lang.Double" />
+	</class>
+</hibernate-mapping>

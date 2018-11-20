@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.secretaria.correspondencia.vo.CorrespondenciaVO" table='"CORRESPONDENCIA"'>
+		<id column="id" name="id" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property column='"remitente"' name="remitente" type="java.lang.String" length="255" not-null="true"/>
+		<property column='"receptor"' name="receptor" type="java.lang.String" length="255" not-null="true"/>
+		<property column='"fechaEntrada"' name="fechaEntrada" type="java.util.Date" length="255" />
+		<property column='"fechaSalida"' name="fechaSalida" type="java.util.Date" length="255" />
+		<property column='"asunto"' name="asunto" type="java.lang.String" length="255" />
+		<property column='"idGrupo"' name="idGrupo" type="java.lang.Long" />
+	</class>
+</hibernate-mapping>

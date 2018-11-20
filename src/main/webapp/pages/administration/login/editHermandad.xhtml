@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm">
+			<h:outputText value="Edición de usuario" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" styleClass="editionFieldset" legend="Datos del usuario">
+				<p:outputPanel id="imagePathGroup" layout="block" styleClass="editionItem">	       		
+		       		<p:outputPanel id="hermandadImagenBlock" layout="block" styleClass="imageEditionItem clearfix" style="width: 70%;">
+		       			<p:fieldset legend="Imagen guardada" styleClass="hermandadImagenFieldset"
+		       					rendered="#{not empty loginBean.hermandadSelected.hermandadImage}">
+		       				<p:commandLink action="#{loginBean.clearSavedHermandadImage}" title="Borrar imagen" 
+		       						styleClass="deleteImagen" update="hermandadImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							
+						    <p:graphicImage value="#{loginBean.imageHermandadInList}" styleClass="imagenHermandad" />
+						</p:fieldset>
+						
+						<p:fieldset legend="Nueva imagen" rendered="#{not empty loginBean.uploadedHermandadFile}" 
+								styleClass="hermandadImagenFieldset">
+							<p:commandLink action="#{loginBean.clearUploadedImage}" title="Borrar imagen" 
+									styleClass="deleteImagen" update="hermandadImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							<!-- <p:imageCropper value="#{imageCropperBean.croppedImage}"  
+                    			image="#{loginBean.imageInListUploaded}"  
+                    			initialCoords="10,10,50,50"/> -->
+                    
+							<p:graphicImage value="#{loginBean.imageHermandadInListUploaded}" styleClass="imagenHermandad"
+									style="max-width: 100px;">
+							</p:graphicImage>
+						</p:fieldset>
+					</p:outputPanel>
+			       	
+			       	<p:outputPanel layout="block" styleClass="uploadFileEditionItem clearfix">
+			       		<h:outputLabel for="file" value="Imagen de perfil" />
+			       		<h:graphicImage value="/resources/img/icons/help.png" 
+			       			title="El máximo ancho o alto de la imagen es de 200 píxeles. En caso de ser mayor, escalaremos su imagen." />
+			       		<p:fileUpload id="file" mode="advanced" fileUploadListener="#{loginBean.uploadHermandadFile}"
+			       			update="imagePathGroup" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+			       		<h:message for="file" display="text" />
+		       		</p:outputPanel>
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block">
+					<p:outputLabel for="nombreCorto" value="Nombre corto" />
+	        		<p:inputText id="nombreCorto" value="#{loginBean.loggedUser.hermandadNombreCorto}" required="true" />
+	        		<p:message for="nombreCorto" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block">
+					<p:outputLabel for="urlWeb" value="Web" />
+	        		<p:inputText id="urlWeb" value="#{loginBean.loggedUser.hermandadUrlWeb}" />
+	        		<p:message for="urlWeb" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+				
+			<p:commandLink action="#{loginBean.doUpdateHermandadInformation}" value="Actualizar perfil" process="@all" />
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

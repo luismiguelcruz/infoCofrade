@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+	<class name="com.infoCofrade.administration.menuItem.vo.MenuItemVO" table='"MENU_ITEM"'>
+		<id column='"id"' name="id" type="java.lang.Long">
+			<generator class="native" />
+		</id>
+		<property column='"itemName"' name="itemName" type="java.lang.String" length="200" not-null="true"/>
+		<property column='"beanName"' name="beanName" type="java.lang.String" length="300" not-null="false"/>
+		<property column='"idParent"' name="idParent" type="java.lang.Long" not-null="false"/>
+		<property column='"orderToShow"' name="orderToShow" type="java.lang.Integer" not-null="false"/>
+		<property column='"hasChildren"' name="hasChildren" type="java.lang.Boolean" />
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de calles" styleClass="pageTitle" />
+		
+			<h:commandLink action="#{calleBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="edition" />
+			</h:commandLink>
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="nombreViaFilter" value="Nombre de la via" />
+	        		<p:inputText id="nombreViaFilter" value="#{calleBean.calleFilter.nombreVia}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterLeft">
+		       		<h:outputLabel for="idLocalidadFilter" value="Localidad" />
+		       		<h:selectOneMenu id="idLocalidadFilter" value="#{calleBean.calle.idLocalidad}"
+		       				valueChangeListener="#{calleBean.doAddFilter}">
+		       			<f:ajax render="listForm" execute="@this" />
+		       			<f:attribute name="idLocalidad" value="true" />  
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{localidadBean.listLocalidadFilter}" var="localidad" 
+								itemLabel="#{localidad.localidad}" itemValue="#{localidad.id}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{calleBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Limpiar" action="#{calleBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{calleBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listTable" var="calle" value="#{calleBean.listCalle}" 
+				paginator="true" rows="10"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column sortBy="nombreVia">
+	        		<f:facet name="header">
+	        			<h:outputText value="Calle" />
+	        		</f:facet>
+					<h:outputText value="#{calle.nombreVia}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="idLocalidad">
+	        		<f:facet name="header">
+	        			<h:outputText value="Localidad" />
+	        		</f:facet>
+					<h:outputText value="#{calle.idLocalidad}" converter="#{localidadConverter}" />
+	        	</p:column>
+	        	
+	        	
+	        	<!-- Actions -->
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{calleBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{calle.id}" />
+						<f:param name="edition" value="edition" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar elemento">
+						<f:setPropertyActionListener value="#{calle.id}" target="#{calleBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">  
+				        <p:commandLink value="Sí" update=":listForm:listTable" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{calleBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty calleBean.listCalle}">  
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="calle"/>  
+		        </h:commandLink>
+		        
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="calle" />  
+		        </h:commandLink>
+		          
+		       <!-- <h:commandLink>  
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="calle" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="calle" />  
+		        </h:commandLink> -->  
+		    </h:panelGroup>  
+	        
+	        <h:commandLink action="#{calleBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="edition" />
+	        </h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

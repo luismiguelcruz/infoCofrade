@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+      
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      
+	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<!-- <h:outputStylesheet library="css" name="styles.css" /> -->
+		<link rel="stylesheet" type="text/css" href="#{loginBean.cssFileUrl}" />
+		
+		<ui:insert name="head" />
+		<title><ui:insert name="title" /></title>
+		<script type="text/javascript">  
+		    function startDownloadFileDialog() {
+		        statusDownloadFileDialog.show();
+		    }  
+		
+		    function stopDownloadFileDialog() {  
+		        statusDownloadFileDialog.hide();  
+		    }
+
+		    function handleLoginRequest(xhr, status, args) {  
+		        if(args.validationFailed || !args.loggedIn) {  
+		            dlg.jq.effect("shake", { times:5 }, 100);  
+		        }   
+		        else {  
+		            dlg.hide();  
+		            $('#loginLink').fadeOut();  
+		        }  
+		    }
+
+		 	// Cuando expira la sesion, redirigir a la pagina de inicio
+		    function cookieExpired(){
+			    if(!($.cookie('userSession') === null)) {  // if expired / non-existent
+			    } else {
+			    	sessionTimeOutDialog.show();
+				}
+			}
+
+		    $(document).ready(function(){
+			   // Every 20 seconds we test if the session cookie has expired
+	    	   var refreshId = setInterval(cookieExpired, 20000);
+	    	   $.ajaxSetup({ cache: false });
+	    	});
+		</script>
+	</h:head>
+	
+	<h:body>
+		<f:view>
+		    <f:loadBundle basename="properties.Messages" var="msg" />
+		</f:view>
+	    <div id="wrapper" class="wrapper"> 
+	    	<p:outputPanel layout="block" id="header-section" rendered="#{loginBean.isUserLogged}">
+	    		<div class="menuSection">
+	        		<ui:include src="header.xhtml"/>
+	        	</div>
+	        </p:outputPanel>
+	        <p:dialog header="Session expired" widgetVar="sessionTimeOutDialog"
+             		modal="true" fixedCenter="true" closable="false" width="400" visible="false">
+				<h:outputText value="La sesión ha caducado, por favor vuelva a identificarse en el sistema"
+						style="display: block; margin: 0 auto; text-align: center;"/>
+				<input style="display: block; margin: 1em auto;" id="confirmBackToLogin" type="button" value="Restart"
+					onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.xhtml';" />
+            </p:dialog>
+            
+            <h:panelGroup layout="block" styleClass="alertas" rendered="#{loginBean.isUserLogged}">
+            	<h:graphicImage value="/resources/img/icons/bell.png" alt="Alertas" title="Alertas pendientes" />
+            </h:panelGroup>
+            
+            <h:form id="hermandadForm" styleClass="hermandadBlock">
+	            <h:panelGroup layout="block" rendered="#{loginBean.isUserLogged and
+	            		not empty loginBean.loggedUser.idHermandad}">
+					<p:graphicImage value="#{loginBean.imageHermandadInList}" styleClass="hermandadImg" 
+		        		rendered="#{not empty loginBean.loggedUser.hermandadImage}" />
+					<h:outputText value="#{loginBean.loggedUser.hermandadNombreCorto}" styleClass="nombreCorto" />
+					<h:outputText value="#{loginBean.loggedUser.hermandadUrlWeb}" styleClass="nombreLargo" />
+					
+					<h:commandLink action="#{loginBean.doEditHermandad}" value="Modificar" 
+						rendered="#{loginBean.isUserLogged and loginBean.loggedUser.id eq -1}" />
+				</h:panelGroup>
+			</h:form>
+	        
+	        <h:form id="loginForm">
+	        	<h:panelGroup layout="block" styleClass="homeLink" rendered="#{loginBean.isUserLogged}">
+		        	<h:outputLink value="#{request.contextPath}/pages/home.xhtml" immediate="true">
+		        		<h:outputText value="INFO" />
+		        		<h:outputText value="COFRADE" styleClass="cofradeLink"/>
+		        	</h:outputLink>
+	        	</h:panelGroup>
+	        
+        		<p:outputPanel layout="block" styleClass="loginBlock">
+        			<p:outputPanel rendered="#{loginBean.isUserLogged}" layout="block" styleClass="loginBlockLogged">
+        				<p:outputPanel styleClass="loggedUserStructure">
+	        				<p:commandLink id="loggedUserData" styleClass="loggedUserData">
+		        				<h:outputText value="#{loginBean.loggedUser.name}" id="loggedUserName" styleClass="userName" />
+		        				<h:outputText value="#{loginBean.loggedUser.surname}" id="loggedUserSurname" styleClass="userSurname" />
+		        				<h:graphicImage value="${pageContext.request.contextPath}/resources/img/icons/arrow-down.png" 
+		        						alt="Arrow down img" title="Show options" styleClass="ArrowDown" />
+		        				<p:graphicImage value="#{loginBean.imageInList}" styleClass="userImg" 
+		        					rendered="#{not empty loginBean.loggedUser.userImage}" />
+		        				<p:graphicImage rendered="#{empty loginBean.loggedUser.userImage}" 
+		        					style="background-color:transparent;"
+		        					value="${pageContext.request.contextPath}/resources/img/icons/maleGuest.png"
+		        					styleClass="userImg"/>
+	        				</p:commandLink>
+	        				
+	        				<p:overlayPanel for="loggedUserData" styleClass="loggedUserNamePanel"
+					    		hideEffect="fade" my="right bottom" at="right bottom">
+						    	<p:graphicImage value="#{loginBean.imageInList}" styleClass="imagenPerfil" 
+						    		rendered="#{not empty loginBean.loggedUser.userImage}" />
+						    	<h:commandLink action="#{loginBean.doEditUser}" value="Modificar perfil" />
+						    	<h:commandLink action="#{loginBean.doEditUser}" value="Guía rápida" />
+						    	<h:commandLink action="#{loginBean.doEditUser}" value="Ayuda" />
+						        
+						        <p:outputPanel layout="block" styleClass="loginActions clearfix">
+				        			<h:commandLink action="#{loginBean.doLogout}" value="Logout" immediate="true" />
+			        			</p:outputPanel>
+						    </p:overlayPanel>
+        				</p:outputPanel>
+        				<p:commandLink id="interfazLinkPanel" styleClass="loggedUserData">
+        					<h:graphicImage alt="interfaz" styleClass="interfazImg" 
+        							value="${pageContext.request.contextPath}/resources/img/icons/wheel.png" />
+        				</p:commandLink>
+					    
+					    <p:overlayPanel for="interfazLinkPanel" styleClass="interfazPanel"
+					    		hideEffect="fade" my="right bottom" at="right bottom" 
+					    		rendered="#{not empty cssProfileBean.listCssProfile}">
+					    	<p:dataList id="listTable" var="cssProfile" value="#{cssProfileBean.listCssProfile}" 
+								rowIndexVar="rowIndex" styleClass="listCssProfiles">
+								
+								<h:commandLink action="#{loginBean.doUpdateUserInformation}">
+									<h:outputText value="" style="#{cssProfile.styleProfile}"/>
+									<f:param name="cssProfile" value="#{cssProfile.id}" />
+								</h:commandLink>
+					        </p:dataList>
+					    </p:overlayPanel>
+					    
+	        			<!-- <h:outputText value="#{loginBean.loggedUser.userType}" styleClass="userRol" /> -->
+        			</p:outputPanel>
+        			<p:outputPanel rendered="#{not loginBean.isUserLogged}" layout="block" styleClass="loginBlockDialog">
+        				<p:commandLink styleClass="imageLogin" id="loginLink" 
+        						onclick="dlg.show()" title="login">     
+					        <p:graphicImage value="/resources/img/icons/fingerprint.png" alt="Login img" styleClass="userImage" />  
+					        <h:outputText value="Login" />
+					    </p:commandLink>
+					    <p:dialog id="loginDialog" header="Login" widgetVar="dlg" resizable="false">  
+					        <h:panelGrid columns="2" cellpadding="5">  
+					            <h:outputLabel for="nickname" value="Usuario:" />  
+					            <p:inputText value="#{loginBean.userView.username}"   
+					                    id="nickname" required="true" />
+					              
+					            <h:outputLabel for="password" value="Contraseña:" />  
+					            <h:inputSecret value="#{loginBean.userView.md5Password}"   
+					                    id="password" required="true" />
+					              
+					            <f:facet name="footer">  
+					                <p:commandButton id="loginButton" value="Login"    
+					                    action="#{loginBean.doLogin}" update=":header-section"
+					                    oncomplete="handleLoginRequest(xhr, status, args)"/>  
+					            </f:facet>  
+					        </h:panelGrid>
+					    </p:dialog>
+        			</p:outputPanel>
+	        	</p:outputPanel>
+        	</h:form>
+	     
+	        <div id="content">
+	        	<h:form id="messagesForm">
+	        		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" globalOnly="true" />
+	        		
+	        		<!-- Dialog to download files -->
+	        		<p:dialog modal="true" widgetVar="statusDownloadFileDialog" header="Status" 
+					    	draggable="false" closable="false" resizable="false"
+					    	dynamic="true" hideEffect="explode">
+						<p:graphicImage value="/resources/img/gifs/ajaxLoadingBar.gif" />
+					</p:dialog>
+	        	</h:form>
+	        	
+	            <ui:insert name="content">
+	            </ui:insert>
+	        </div>
+	        
+	        <div style="clear: both; height: 1.7em; width: 100%;"></div>
+	             
+	        <div id="footer" style="clear: both; display: block; width: 100%; margin-top: 2em;">
+	        	<h:form id="resetDataBaseForm" rendered="#{loginBean.isUserLogged and loginBean.loggedUser.id eq -1}">
+					<h:panelGroup layout="block">
+						<h:commandLink value="Acerca de" />
+						<h:outputText value="/" style="margin: 0 3px;" />
+						<h:commandLink value="Configuración" action="#{loginBean.doResetDataBase}" />
+					</h:panelGroup>
+				</h:form>
+	        </div>
+	    </div>
+	</h:body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false" styleClass="clearfix">
+			<h:outputText value="Memoria anual de actos" styleClass="pageTitle" />
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="anyoFilter" value="Año" />
+	        		<p:inputText id="anyoFilter" value="#{memoriaAnualBean.anyo}" 
+	        			converterMessage="Debe introducir un número de año correcto" />
+	        		<p:message for="anyoFilter" display="text" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{memoriaAnualBean.doAddFilter}" update="listTable filter" />
+	        		<p:commandLink value="Limpiar" action="#{memoriaAnualBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{memoriaAnualBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+			
+			<p:dataList id="listTable" var="eventosMes" value="#{memoriaAnualBean.listMemoriaAnual}" type="definition"
+					emptyMessage="#{memoriaAnualBean.emptyMessage}"
+					styleClass="memoriaAnual clearfix">
+				<p:fieldset legend="#{eventosMes.nombreMes}" rendered="#{not empty eventosMes}" styleClass="nombreMes">
+					<p:dataList id="listActoMes" var="actoMes" value="#{eventosMes.listActosMes}" type="definition"
+						styleClass="clearfix">
+						<fieldset class="actoMes">
+							<legend>
+								<h:outputText value="#{actoMes.fecha}">
+									<f:convertDateTime pattern="#{memoriaAnualBean.dayOfMonthFormat}" locale="es_ES" />
+								</h:outputText>
+							</legend>
+							
+							<h:panelGroup layout="block" styleClass="infoActo">
+								<h:outputLabel value="Acto: " />
+								<h:outputText value="#{actoMes.titulo}" />
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="infoActo">
+								<h:outputLabel value="Lugar: " />
+								<h:outputText value="#{actoMes.lugar}" />
+							</h:panelGroup>
+						</fieldset>
+					</p:dataList>
+				</p:fieldset>
+			</p:dataList>
+    	</h:form>
+    	<div style="width: 100%; height: 1em;"></div>
+    </ui:define>
+ 
+</ui:composition>
+</html>

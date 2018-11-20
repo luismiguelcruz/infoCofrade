@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+    	<!-- <h:outputText value="#{msg.message}" />-->
+    	
+		<h:form id="listForm" prependId="false">
+			<!-- Filter Menu -->
+			<p:fieldset id="filter" styleClass="filter filterFieldsetShort" legend="Añadir Menu">
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="itemNameFilter" value="Nombre del menú" style="width: 100%;" />
+	        		<p:inputText id="itemNameFilter" styleClass="editSelect" value="#{menuItemBean.menuItemConfiguration.itemName}" />
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="orderToShowFilter" value="Número de orden de aparición" style="width: 100%;" />
+					<p:inputText id="orderToShowFilter" value="#{menuItemBean.menuItemConfiguration.orderToShow}" />
+	        	</p:outputPanel>
+	        	
+	        	<p:outputPanel layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Add item" action="#{menuItemBean.doAddMenuItem}" update="listMenuItemConfiguration" />
+	        		<p:commandLink value="Clear Filter" action="#{menuItemBean.doClearFilter}" update="filter" immediate="true" />
+	        	</p:outputPanel>
+	        </p:fieldset>
+	        
+	        <!-- Filter Sub Menu -->
+			<p:fieldset id="filterSubMenu" styleClass="filterSubMenu filterFieldsetShort" legend="Añadir Submenu">
+				<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="parentSubMenuFilter" value="Id Parent" style="width: 100%;" />
+	        		<p:inputText id="parentSubMenuFilter" styleClass="editSelect" value="#{menuItemBean.subMenuConfiguration.idParent}" disabled="true" />
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="itemSubMenuNameFilter" value="Nombre del submenú" style="width: 100%;" />
+	        		<p:inputText id="itemSubMenuNameFilter" styleClass="editSelect" value="#{menuItemBean.subMenuConfiguration.itemName}" />
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="orderToShowSubMenuFilter" value="Número de orden de aparición" style="width: 100%;" />
+					<p:inputText id="orderToShowSubMenuFilter" value="#{menuItemBean.subMenuConfiguration.orderToShow}" />
+	        	</p:outputPanel>
+	        	
+	        	<p:outputPanel layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Add item" action="#{menuItemBean.doAddSubMenu}" update="listMenuItemConfiguration" />
+	        		<p:commandLink value="Clear Filter" action="#{menuItemBean.doClearFilterSubMenu}" update="filterSubMenu" immediate="true" />
+	        	</p:outputPanel>
+	        </p:fieldset>
+	        
+	        <!-- Filter Sub Menu Item-->
+	        <p:fieldset id="filterSubMenuItem" styleClass="filterFieldsetShort clearfix" legend="Add Submenu Item">
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="parentSubMenuItemFilter" value="Id Parent" style="width: 100%;" />
+	        		<p:inputText id="parentSubMenuItemFilter" styleClass="editSelect" value="#{menuItemBean.subMenuItemConfiguration.idParent}" disabled="true" />
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="itemNameSubMenuItemFilter" value="Item Name" style="width: 100%;" />
+	        		<p:inputText id="itemNameSubMenuItemFilter" styleClass="editSelect" value="#{menuItemBean.subMenuItemConfiguration.itemName}" />
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="orderToShowSubMenuItemFilter" value="Order to show" style="width: 100%;" />
+					<p:inputText id="orderToShowSubMenuItemFilter" value="#{menuItemBean.subMenuItemConfiguration.orderToShow}">
+					</p:inputText>
+	        	</p:outputPanel>
+	        	<p:outputPanel layout="block" styleClass="filterLeft">
+	        		<p:outputLabel for="beanNameSubMenuFilter" value="Bean Name" style="width: 100%;" />
+					<p:inputText id="beanNameSubMenuFilter" value="#{menuItemBean.subMenuItemConfiguration.beanName}" />
+	        	</p:outputPanel>
+	        	
+	        	<p:outputPanel layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Add item" action="#{menuItemBean.doAddSubMenuItem}" update="listMenuItemConfiguration" />
+	        		<p:commandLink value="Clear Filter" action="#{menuItemBean.doClearFilterSubMenuItem}" update="filterSubMenuItem" immediate="true" />
+	        	</p:outputPanel>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listMenuItemConfiguration" var="menu" value="#{menuItemBean.listMenuItemsConfiguration}" 
+				styleClass="tableResults" draggableColumns="true">
+				<!-- <p:ajax event="rowToggle" listener="#{menuItemBean.onRowToggle}" update=":listForm:dropdownmessage" /> -->
+				
+	        	<p:column sortBy="#{menu.itemName}">
+	        		<f:facet name="header">
+	        			<h:outputText value="Name" />
+	        		</f:facet>
+					<h:outputText value="#{menu.itemName}" />
+	        	</p:column>
+	        	<p:column sortBy="#{menu.beanName}">
+	        		<f:facet name="header">
+	        			<h:outputText value="Bean Name" />
+	        		</f:facet>
+					<h:outputText value="#{menu.beanName}" />
+	        	</p:column>
+	        	<p:column sortBy="#{menu.orderToShow}">
+	        		<f:facet name="header">
+	        			<h:outputText value="Order To Show" />
+	        		</f:facet>
+					<h:outputText value="#{menu.orderToShow}" />
+	        	</p:column>
+	        	
+	        	<!-- Actions -->
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Actions" />
+	        		</f:facet>
+	        		<p:rowToggler />
+					<p:commandLink action="#{menuItemBean.doChangeSubMenuWatch}" update=":listForm:filterSubMenu" 
+						title="Cargar información del submenú">
+						<p:graphicImage value="/resources/img/icons/folder-add-icon.png" style="width: 16px" />
+						<f:param name="id" value="#{menu.id}" />
+					</p:commandLink>
+					<p:commandLink action="#{menuItemBean.doChangeSubMenuItemWatch}" update=":listForm:filterSubMenuItem" 
+						title="Cargar información del elemento del submenú">
+						<p:graphicImage value="/resources/img/icons/add.png" />
+						<f:param name="id" value="#{menu.id}" />
+					</p:commandLink>
+					<p:commandLink onclick="confirmationItem.show()" title="Eliminar menu">
+						<f:setPropertyActionListener value="#{menu.id}" target="#{menuItemBean.selectedDeleteItemId}" />
+						<p:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el menu y todos sus submenues?"  
+						header="Delete Item" severity="alert" widgetVar="confirmationItem">  
+				        <p:commandLink value="Sí" update=":listForm:listMenuItemConfiguration" oncomplete="confirmationItem.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{menuItemBean.doRemoveMenuItem}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmationItem.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        	
+	        	<!-- embedded table -->
+	        	<p:rowExpansion>
+	        		<p:outputPanel styleClass="embebedTable" layout="block">
+		        		<p:dataTable value="#{menu.listSubMenu}" var="subMenu">
+		        			<p:column sortBy="#{subMenu.itemName}">
+				        		<f:facet name="header">
+				        			<h:outputText value="Name" />
+				        		</f:facet>
+								<h:outputText value="#{subMenu.itemName}" />
+				        	</p:column>
+				        	<p:column sortBy="#{subMenu.beanName}">
+				        		<f:facet name="header">
+				        			<h:outputText value="Bean Name" />
+				        		</f:facet>
+								<h:outputText value="#{subMenu.beanName}" />
+				        	</p:column>
+				        	<p:column sortBy="#{subMenu.orderToShow}">
+				        		<f:facet name="header">
+				        			<h:outputText value="Order To Show" />
+				        		</f:facet>
+								<h:outputText value="#{subMenu.orderToShow}" />
+				        	</p:column>
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Actions" />
+				        		</f:facet>
+				        		<p:rowToggler rendered="#{subMenu.hasChildren}" />
+				        		<p:commandLink action="#{menuItemBean.doEditElement}" title="Editar submenu" update=":listForm:filterSubMenuItem">
+									<h:graphicImage value="/resources/img/icons/pencil.png" />
+									<f:param name="id" value="#{subMenu.id}" />
+									<f:param name="edition" value="true" />
+								</p:commandLink>
+								<p:commandLink action="#{menuItemBean.doChangeSubMenuWatch}" update=":listForm:filterSubMenu" 
+									title="Cargar información del submenú">
+									<p:graphicImage value="/resources/img/icons/folder-add-icon.png" style="width: 16px" />
+									<f:param name="id" value="#{subMenu.id}" />
+								</p:commandLink>
+								<p:commandLink action="#{menuItemBean.doChangeSubMenuItemWatch}" update=":listForm:filterSubMenuItem" 
+									title="Cargar información del elemento del submenú">
+									<p:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{subMenu.id}" />
+								</p:commandLink>
+								<p:commandLink title="Eliminar submenu" onclick="confirmation.show()">
+									<f:setPropertyActionListener value="#{subMenu.id}" target="#{menuItemBean.selectedDeleteItemId}" />
+									<p:graphicImage value="/resources/img/icons/cross.png" />
+								</p:commandLink>
+								<p:confirmDialog message="¿Está seguro de borrar el submenú?" severity="alert" 
+							                widgetVar="confirmation">
+							        <p:commandLink value="Sí" update=":listForm:listMenuItemConfiguration" oncomplete="confirmation.hide();"
+							                    action="#{menuItemBean.doRemoveMenuItem}" />
+							        <p:commandLink value="No" onclick="confirmation.hide()" />
+							    </p:confirmDialog>
+				        	</p:column>
+				        	
+				        	<p:rowExpansion>
+				        		<p:outputPanel styleClass="embebedTable" layout="block">
+					        		<p:dataTable value="#{subMenu.listSubMenu}" var="subMenu">
+					        			<p:column sortBy="#{subMenu.itemName}">
+							        		<f:facet name="header">
+							        			<h:outputText value="Name" />
+							        		</f:facet>
+											<h:outputText value="#{subMenu.itemName}" />
+							        	</p:column>
+							        	<p:column sortBy="#{subMenu.beanName}">
+							        		<f:facet name="header">
+							        			<h:outputText value="Bean Name" />
+							        		</f:facet>
+											<h:outputText value="#{subMenu.beanName}" />
+							        	</p:column>
+							        	<p:column sortBy="#{subMenu.orderToShow}">
+							        		<f:facet name="header">
+							        			<h:outputText value="Order To Show" />
+							        		</f:facet>
+											<h:outputText value="#{subMenu.orderToShow}" />
+							        	</p:column>
+							        	<p:column>
+							        		<f:facet name="header">
+							        			<h:outputText value="Actions" />
+							        		</f:facet>
+							        		<p:rowToggler />
+							        		<p:commandLink action="#{menuItemBean.doEditElement}" title="Editar submenu" update=":listForm:filterSubMenuItem">
+												<h:graphicImage value="/resources/img/icons/pencil.png" />
+												<f:param name="id" value="#{subMenu.id}" />
+												<f:param name="edition" value="true" />
+											</p:commandLink>
+											<p:commandLink action="#{menuItemBean.doChangeSubMenuWatch}" update=":listForm:filterSubMenu" 
+												title="Cargar información del submenú">
+												<p:graphicImage value="/resources/img/icons/folder-add-icon.png" style="width: 16px" />
+												<f:param name="id" value="#{subMenu.id}" />
+											</p:commandLink>
+											<p:commandLink action="#{menuItemBean.doChangeSubMenuItemWatch}" update=":listForm:filterSubMenuItem" 
+												title="Cargar información del elemento del submenú">
+												<p:graphicImage value="/resources/img/icons/add.png" />
+												<f:param name="id" value="#{subMenu.id}" />
+											</p:commandLink>
+											<p:commandLink title="Eliminar submenu" onclick="confirmation.show()">
+												<f:setPropertyActionListener value="#{subMenu.id}" target="#{menuItemBean.selectedDeleteItemId}" />
+												<p:graphicImage value="/resources/img/icons/cross.png" />
+											</p:commandLink>
+											<p:confirmDialog message="¿Está seguro de borrar el submenú?" severity="alert" 
+										                widgetVar="confirmation">
+										        <p:commandLink value="Sí" update=":listForm:listMenuItemConfiguration" oncomplete="confirmation.hide();"
+										                    action="#{menuItemBean.doRemoveMenuItem}" />
+										        <p:commandLink value="No" onclick="confirmation.hide()" />
+										    </p:confirmDialog>
+							        	</p:column>
+					        		</p:dataTable>
+				        		</p:outputPanel>
+				        	</p:rowExpansion>
+		        		</p:dataTable>
+	        		</p:outputPanel>
+	        	</p:rowExpansion>
+	        </p:dataTable>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

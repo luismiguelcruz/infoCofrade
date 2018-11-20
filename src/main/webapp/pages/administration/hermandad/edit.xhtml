@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de hermandades" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Hermandad">
+				<p:outputPanel id="imagePathGroup" layout="block" styleClass="editionItem">	       		
+		       		<p:outputPanel id="noticiaImagenBlock" layout="block" styleClass="imageEditionItem clearfix">
+		       			<p:fieldset legend="Imagen guardada" rendered="#{not empty hermandadBean.hermandad.hermandadImage}"
+		       					styleClass="noticiaImagenFieldset">
+		       				<p:commandLink action="#{hermandadBean.clearSavedImage}" title="Borrar imagen"
+		       						styleClass="deleteImagen" update="noticiaImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							
+						    <p:graphicImage value="#{hermandadBean.imageInList}" styleClass="imagenNoticia" />
+						</p:fieldset>
+						
+						<p:fieldset legend="Nueva imagen" rendered="#{not empty hermandadBean.uploadedFile}" 
+								styleClass="noticiaImagenFieldset">
+							<p:commandLink action="#{hermandadBean.clearUploadedImage}" title="Borrar imagen"
+									styleClass="deleteImagen" update="noticiaImagenBlock" immediate="true">
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							<!-- <p:imageCropper value="#{imageCropperBean.croppedImage}"  
+                    			image="#{loginBean.imageInListUploaded}"  
+                    			initialCoords="10,10,50,50"/> -->
+                    
+							<p:graphicImage value="#{hermandadBean.imageInListUploaded}" styleClass="imagenNoticia"
+									style="max-width: 100px;">
+							</p:graphicImage>
+						</p:fieldset>
+					</p:outputPanel>
+					<p:outputPanel layout="block" styleClass="uploadFileEditionItem clearfix">
+			       		<h:outputLabel for="file" value="Imagen de perfil" />
+			       		<h:graphicImage value="/resources/img/icons/help.png" 
+			       			title="El máximo ancho o alto de la imagen es de 200 píxeles. En caso de ser mayor, escalaremos su imagen." />
+			       		<p:fileUpload id="file" mode="advanced" fileUploadListener="#{hermandadBean.uploadFile}"
+			       			update="imagePathGroup" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+			       		<h:message for="file" display="text" />
+		       		</p:outputPanel>
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigo" value="Código" />
+		       		<p:inputText id="codigo" value="#{hermandadBean.hermandad.codigo}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="codigo" display="text" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreCorto" value="Nombre corto" />
+		       		<p:inputText id="nombreCorto" value="#{hermandadBean.hermandad.nombreCorto}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="nombreCorto" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreLargo" value="Nombre largo" />
+		       		<p:inputTextarea id="nombreLargo" rows="5" cols="30" counter="counter" maxlength="500"       
+					    counterTemplate="{0} caracteres restantes." autoResize="false"
+					    value="#{hermandadBean.hermandad.nombreLargo}"
+					    requiredMessage="Este campo es obligatorio" />
+					<p:message for="nombreLargo" display="text" showSummary="false" />
+					<h:outputText id="counter" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="urlWeb" value="Dirección web" />
+		       		<p:inputText id="urlWeb" value="#{hermandadBean.hermandad.urlWeb}" 
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="urlWeb" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="dataSourceName" value="Nombre del data source" />
+		       		<p:inputText id="dataSourceName" value="#{hermandadBean.hermandad.dataSourceName}" 
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="dataSourceName" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaAlta" value="Fecha de alta" />
+		       		<p:calendar id="fechaAlta" value="#{hermandadBean.hermandad.fechaAlta}" 
+	       				pattern="#{hermandadBean.dateTimeFormat}" requiredMessage="Este campo es obligatorio" />
+	       			<p:message for="fechaAlta" display="text" />  
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaUltimoPago" value="Fecha del último pago" />
+		       		<p:calendar id="fechaUltimoPago" value="#{hermandadBean.hermandad.fechaUltimoPago}" 
+	       				pattern="#{hermandadBean.dateTimeFormat}" requiredMessage="Este campo es obligatorio" />
+	       			<p:message for="fechaUltimoPago" display="text" />  
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaBaja" value="Fecha de baja" />
+		       		<p:calendar id="fechaBaja" value="#{hermandadBean.hermandad.fechaBaja}" 
+	       				pattern="#{hermandadBean.dateTimeFormat}" requiredMessage="Este campo es obligatorio" />
+	       			<p:message for="fechaBaja" display="text" />  
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidad" value="Localidad" />
+		       		<p:autoComplete id="idLocalidad" value="#{hermandadBean.localidadSelected}"
+						completeMethod="#{hermandadBean.doAutoComplete}" minQueryLength="3"
+						var="localidad" itemLabel="#{localidad.localidad}" 
+						itemValue="#{localidad.id}" converter="#{localidadConverter}">
+						<f:attribute name="filter" value="localidad" />
+						<p:ajax listener="#{hermandadBean.loadAddressFields}" 
+								event="itemSelect" update="provincia, codigoPostal" />
+		                <p:column>  
+		                    #{localidad.localidad} (#{localidad.codigoPostal})
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="idLocalidad" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provincia" value="Provincia" />
+		       		<p:inputText id="provincia" value="#{hermandadBean.hermandad.provincia}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostal" value="Código postal" />
+		       		<p:autoComplete id="codigoPostal" value="#{hermandadBean.localidadCPSelected}"
+						completeMethod="#{hermandadBean.doAutoComplete}" minQueryLength="5"
+						var="localidad" itemLabel="#{localidad.codigoPostal}" 
+						itemValue="#{localidad.id}" converter="#{codigoPostalConverter}">
+						<f:attribute name="filter" value="codigoPostal" />
+						<p:ajax listener="#{hermandadBean.loadAddressFields}" 
+								event="itemSelect" update="idLocalidad, provincia" />
+						<p:column>  
+		                    #{localidad.codigoPostal}  (#{localidad.localidad})
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="observaciones" value="Observaciones" />
+		       		<p:inputTextarea id="observaciones" rows="5" cols="30" counter="counterObservaciones" maxlength="2000"       
+					    counterTemplate="{0} caracteres restantes." autoResize="false"
+					    value="#{hermandadBean.hermandad.observaciones}"
+					    requiredMessage="Este campo es obligatorio" />
+					<p:message for="observaciones" display="text" showSummary="false" />
+					<h:outputText id="counterObservaciones" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{hermandadBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{hermandadBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

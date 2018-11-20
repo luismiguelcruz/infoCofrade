@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="listForm" prependId="false">
+			<h:outputText value="Lista de hermandades" styleClass="pageTitle" />
+		
+			<h:commandLink action="#{hermandadBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+			</h:commandLink>
+			
+			<!-- Filter -->
+			<p:fieldset id="filter" styleClass="filterList" legend="Filtros">
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="codigoFilter" value="Código" />
+	        		<p:inputText id="codigoFilter" value="#{hermandadBean.hermandadFilter.codigo}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+				<h:panelGroup layout="block" styleClass="filterLeft">
+	        		<h:outputLabel for="nombreCortoFilter" value="Nombre corto" />
+	        		<p:inputText id="nombreCortoFilter" value="#{hermandadBean.hermandadFilter.nombreCorto}"
+	        			onkeypress="if (event.keyCode == 13) {applyFilter();}" />
+	        	</h:panelGroup>
+	        	
+	        	<h:panelGroup layout="block" styleClass="filterSubmit">
+	        		<p:commandLink value="Filtrar" action="#{hermandadBean.doAddFilter}" update="listTable" />
+	        		<p:commandLink value="Limpiar" action="#{hermandadBean.doClearFilter}" update="listTable filter" />
+	        	</h:panelGroup>
+	        	
+	        	<p:remoteCommand name="applyFilter" actionListener="#{hermandadBean.doAddFilter}" update="listTable"/>
+	        </p:fieldset>
+	        
+	        <!-- Table of elements -->
+	        <p:dataTable id="listTable" var="hermandad" value="#{hermandadBean.listHermandad}" 
+				paginator="true" rows="10"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" draggableColumns="true">
+				
+				<p:column sortBy="codigo">
+	        		<f:facet name="header">
+	        			<h:outputText value="Codigo" />
+	        		</f:facet>
+					<h:outputText value="#{hermandad.codigo}" />
+	        	</p:column>
+				
+				<p:column sortBy="nombreCorto">
+	        		<f:facet name="header">
+	        			<h:outputText value="Nombre corto" />
+	        		</f:facet>
+					<h:outputText value="#{hermandad.nombreCorto}" />
+	        	</p:column>
+	        	
+	        	<p:column sortBy="fechaAlta">
+	        		<f:facet name="header">
+	        			<h:outputText value="Fecha alta" />
+	        		</f:facet>
+					<h:outputText value="#{hermandad.fechaAlta}">
+						<f:convertDateTime pattern="#{hermandadBean.dateFormat}" />
+					</h:outputText>
+	        	</p:column>
+	        	
+	        	<p:column sortBy="fechaSiguientePago">
+	        		<f:facet name="header">
+	        			<h:outputText value="Fecha siguiente pago"/>
+	        		</f:facet>
+					<h:outputText value="#{hermandad.fechaUltimoPago}" converter="#{nextPaymentConverter}" />
+	        	</p:column>
+	        	
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Localidad" />
+	        		</f:facet>
+					<h:outputText value="#{hermandad.idLocalidad}" converter="#{localidadConverter}"/>
+	        	</p:column>
+	        	
+	        	<p:column>
+	        		<f:facet name="header">
+	        			<h:outputText value="Provincia" />
+	        		</f:facet>
+					<h:outputText value="#{hermandad.idLocalidad}" converter="#{provinciaFromLocalidadConverter}"/>
+	        	</p:column>
+	        	
+	        	
+	        	<!-- Actions -->
+	        	<p:column exportable="false">
+	        		<f:facet name="header">
+	        			<h:outputText value="Acciones" />
+	        		</f:facet>
+	        		<h:commandLink action="#{hermandadBean.doEditElement}" title="Editar elemento">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+						<f:param name="id" value="#{hermandad.id}" />
+						<f:param name="edition" value="edition" />
+					</h:commandLink>
+					<p:commandLink onclick="confirmation.show()" title="Eliminar elemento">
+						<f:setPropertyActionListener value="#{hermandad.id}" target="#{hermandadBean.selectedDeleteItemId}" />
+						<h:graphicImage value="/resources/img/icons/cross.png" />
+					</p:commandLink>
+					<p:confirmDialog message="¿Está seguro de borrar el elemento?"  
+						header="Delete Item" severity="alert" widgetVar="confirmation"
+						styleClass="confirmDialog">  
+				        <p:commandLink value="Sí" update=":listForm:listTable" oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+				                    action="#{hermandadBean.doDeleteElement}">
+						</p:commandLink>
+				        <p:commandLink value="No" onclick="confirmation.hide()"/>
+				    </p:confirmDialog>
+	        	</p:column>
+	        </p:dataTable>
+	        
+			<h:panelGroup layout="block" styleClass="exportarListado clearfix" rendered="#{not empty hermandadBean.listHermandad}">  
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/pdf.png" />  
+		            <p:dataExporter type="pdf" target="listTable" fileName="hermandad"/>  
+		        </h:commandLink> 
+		        
+		        <h:commandLink>  
+		            <p:graphicImage value="/resources/img/icons/excel.png" />
+		            <p:dataExporter type="xls" target="listTable" fileName="hermandad" />  
+		        </h:commandLink>
+		          
+		        <!-- <h:commandLink>  
+		            <p:graphicImage value="/images/csv.png" />  
+		            <p:dataExporter type="csv" target="listTable" fileName="hermandad" />  
+		        </h:commandLink>  
+		          
+		        <h:commandLink>  
+		            <p:graphicImage value="/images/xml.png" />  
+		            <p:dataExporter type="xml" target="listTable" fileName="hermandad" />  
+		        </h:commandLink>  -->
+		    </h:panelGroup>  
+	        
+	        <h:commandLink action="#{hermandadBean.doEditElement}" sylteClass="nuevoElemento" value="Nuevo elemento">
+				<f:param name="edition" value="true" />
+	        </h:commandLink>
+    	</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

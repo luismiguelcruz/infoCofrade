@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de ingreso" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Ingreso">
+				<p:outputPanel layout="block" styleClass="editionElement clearfix">
+		       		<h:outputLabel for="cuenta" value="Cuenta" />
+					<h:outputText id="cuenta" value="#{ingresoBean.ingreso.idCuenta}"
+							converter="#{cuentaConverter}" style="float: left; margin-left: 1em;" />
+					<h:message for="cuenta" display="text" />
+				
+					<p:commandLink id="idCuentaLink" action="#{ingresoBean.loadEmbeddedList}"
+							type="button" process="cuenta"
+							rendered="#{empty ingresoBean.idCuentaSelected}">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<h:commandLink action="#{ingresoBean.clearIdCuenta}" 
+							rendered="#{empty ingresoBean.idCuentaSelected}">
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar cuenta"/>
+					</h:commandLink>
+						
+					<p:overlayPanel id="idCuentaPanel" for="idCuentaLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right top"
+							rendered="#{empty ingresoBean.idCuentaSelected}">
+						<p:dataTable id="listTableCuentas" var="cuenta" onExpandStart="false"
+								value="#{ingresoBean.listSearchCuenta}" 
+								paginator="true" rows="10"
+								paginatorPosition="bottom"
+								filteredValue="#{ingresoBean.listFilteredCuentas}">
+							<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Cuenta padre" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.idCuentaPadre}" converter="#{cuentaConverter}" />
+				        	</p:column>
+								  
+				            <p:column filterBy="nombre" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Cuenta" />
+				        		</f:facet>
+								<h:outputText value="#{cuenta.nombre}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{ingresoBean.doSelectCuenta}" 
+										title="Seleccionar cuenta" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{cuenta.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="concepto" value="Concepto" />
+		       		<p:inputText id="concepto" value="#{ingresoBean.ingreso.concepto}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="concepto" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="cuantia" value="Cuantía" />
+		       		<p:inputText id="cuantia" value="#{ingresoBean.ingreso.cuantia}" required="true"
+		       			requiredMessage="Este campo es obligatorio"
+		       			converterMessage="El campo debe contener un numero mayor o igual que cero">
+		       			<f:validateDoubleRange minimum="0" />
+		       		</p:inputText>
+					<p:message for="cuantia" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="anyo" value="Año" />
+		       		<p:inputText id="anyo" value="#{ingresoBean.ingreso.anyo}" required="true" 
+		       			disabled="#{not empty ingresoBean.idCuentaSelected}"
+		       			requiredMessage="Este campo es obligatorio"
+		       			converterMessage="El campo debe contener un numero mayor o igual que cero">
+		       			<f:validateDoubleRange minimum="0" />
+		       		</p:inputText>
+					<p:message for="anyo" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{ingresoBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{ingresoBean.doNavigate}" value="Volver sin guardar" immediate="true"
+					rendered="#{empty ingresoBean.returnPageName}" />
+				<h:commandLink action="#{cuentaBean.doNavigate}" value="Volver al listado de cuentas" immediate="true"
+					rendered="#{not empty ingresoBean.returnPageName}" />
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

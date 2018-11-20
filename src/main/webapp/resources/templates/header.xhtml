@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+       	
+	<!-- <h:form id="menuForm">
+		<p:menubar styleClass="menu">
+			<p:submenu label="Secretaria" icon="ui-icon-folder-open">
+				<p:menuitem value="Actos" action="#{actoBean.doNavigate}" />
+				<p:menuitem value="Memoria anual de actos" action="#{memoriaAnualBean.doNavigate}" />
+				<p:menuitem value="Correspondencia" action="#{correspondenciaBean.doNavigate}" />
+				<p:menuitem value="Entidades" action="#{entidadBean.doNavigate}" />
+        		<p:menuitem value="Hermanos" action="#{hermanoBean.doNavigate}" />
+			</p:submenu>
+			<p:submenu label="Tesorería" icon="ui-icon-folder-open">
+        		<p:menuitem value="Plazos de pago" action="#{plazoPagoBean.doNavigate}" />
+        	</p:submenu>
+	        <p:submenu label="Administracion" icon="ui-icon-home">
+	        	<p:menuitem value="Menues" action="#{menuItemBean.doNavigate}" />
+	        	<p:menuitem value="Usuarios" action="#{userBean.doNavigate}" />
+	        	<p:menuitem value="Roles" action="#{userTypeBean.doNavigate}" />
+	        	<p:menuitem value="Permisos a URLs" action="#{urlPermissionBean.doNavigate}" />
+	        	<p:menuitem value="Permisos por rol" action="#{rolUrlPermissionBean.doNavigate}" />
+	        	<p:menuitem value="Localidades" url="/pages/administration/localidad/list.xhtml" />
+	        	<p:menuitem value="Provincia" url="/pages/administration/provincia/list.xhtml" />
+	        	<p:submenu label="Secretaria" icon="ui-icon-folder-open">
+					<p:menuitem value="Grupos" action="#{grupoBean.doNavigate}" />
+					<p:menuitem value="Tipos de entidades" action="#{tipoEntidadBean.doNavigate}" />
+	        		<p:menuitem value="Métodos de pago" action="#{metodoPagoBean.doNavigate}" />
+	        		<p:menuitem value="Sectores" action="#{sectorBean.doNavigate}" />
+	        		<p:menuitem value="Status" action="#{statusBean.doNavigate}" />
+				</p:submenu>
+			</p:submenu>
+		</p:menubar>
+	</h:form> -->
+       	
+	<h:form id="menuForm">
+		<p:tieredMenu styleClass="menu" model="#{loginBean.menuModel}" autoDisplay="false" />
+	</h:form>
+	
+	<ui:insert name="header" />
+</html>

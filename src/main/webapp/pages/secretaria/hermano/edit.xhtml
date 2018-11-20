@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de hermano" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Hermano">
+				<p:outputPanel layout="block" styleClass="editionElement"
+				 		rendered="#{not empty hermanoBean.hermano.id}">
+		       		<p:outputLabel for="numHermano" value="Número de hermano" />
+		       		<p:inputText id="numHermano" value="#{hermanoBean.hermano.numHermano}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" 
+						rendered="#{not empty hermanoBean.hermano.id}">
+		       		<p:outputLabel for="numIngreso" value="Número de ingreso" />
+		       		<p:inputText id="numIngreso" value="#{hermanoBean.hermano.numIngreso}" disabled="true" />
+				</p:outputPanel>
+			
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreHermano" value="Nombre" />
+		       		<p:inputText id="nombreHermano" value="#{hermanoBean.hermano.nombre}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="nombreHermano" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="apellidos" value="Apellidos" />
+		       		<p:inputText id="apellidos" value="#{hermanoBean.hermano.apellidos}" required="true"
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="apellidos" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nif" value="Nif" />
+		       		<p:inputText id="nif" value="#{hermanoBean.hermano.nif}" 
+		       			requiredMessage="Este campo es obligatorio" />
+					<p:message for="nif" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaNacimiento" value="Fecha de nacimiento" />
+		       		<p:calendar id="fechaNacimiento" value="#{hermanoBean.hermano.fechaNacimiento}" 
+	       				pattern="#{hermanoBean.dateFormat}" required="true" 
+	       				maxdate="#{correspondenciaBean.today}" requiredMessage="Este campo es obligatorio"
+	       				showButtonPanel="true" navigator="true" />
+					<p:message for="fechaNacimiento" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreVia" value="Nombre de la vía" />
+		       		<p:inputText id="nombreVia" value="#{hermanoBean.hermano.nombreVia}"
+		       			requiredMessage="Este campo es obligatorio" disabled="true"/>
+					<p:message for="nombreVia" display="text" />
+					
+					<p:commandLink id="idCalleLink" type="button">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<h:commandLink action="#{hermanoBean.clearIdCalle}" >
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar calle"/>
+					</h:commandLink>
+						
+					<p:overlayPanel id="idCallePanel" for="idCalleLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right bottom">
+						<p:dataTable id="listTableCalles" var="calle" onExpandStart="false"
+								value="#{hermanoBean.listSearchCalle}" 
+								filteredValue="#{hermanoBean.listFilteredCalles}"
+								paginator="true" rows="10"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+								rowsPerPageTemplate="10,25,50,100" paginatorPosition="bottom">  
+				            <p:column filterBy="nombreVia" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Calle" />
+				        		</f:facet>
+								<h:outputText value="#{calle.nombreVia}" />
+				        	</p:column>
+				        	
+				        	<p:column filterBy="localidad" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Localidad" />
+				        		</f:facet>
+								<h:outputText value="#{calle.localidad}" />
+				        	</p:column>
+				        	
+				        	<p:column filterBy="provincia" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Provincia" />
+				        		</f:facet>
+								<h:outputText value="#{calle.provincia}" />
+				        	</p:column>
+				        	
+					        <p:column filterBy="pais" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Pais" />
+				        		</f:facet>
+								<h:outputText value="#{calle.pais}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{hermanoBean.doSelectCalle}" 
+										title="Seleccionar calle" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{calle.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+					
+					
+					<!-- <p:autoComplete id="nombreVia2" value="#{hermanoBean.calleSelected}"
+							minQueryLength="3" var="calle" itemLabel="#{calle.nombreVia}" 
+							itemValue="#{calle.id}" converter="#{calleConverter}"
+							completeMethod="#{hermanoBean.doAutoComplete}">
+						<f:attribute name="filter" value="calle" />
+						<p:ajax listener="#{hermanoBean.loadAddressCalleFields}" 
+								event="itemSelect" />
+		                <p:column>  
+		                    #{calle.id}
+		                </p:column>
+					</p:autoComplete> -->
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idTipoVia" value="Tipo de vía" />
+		       		<h:selectOneMenu id="idTipoVia" value="#{hermanoBean.hermano.idTipoVia}"
+		       				requiredMessage="Este campo es obligatorio" disabled="true" >  
+						<f:selectItem itemLabel="-- Seleccionar tipo de via --" itemValue="" />  
+						<f:selectItems value="#{tipoViaBean.listTipoVia}" var="tipoVia"
+								itemLabel="#{tipoVia.nombre}" itemValue="#{tipoVia.id}"/>  
+					</h:selectOneMenu>
+					<p:message for="idTipoVia" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="numKm" value="Num/KM" />
+		       		<p:inputText id="numKm" value="#{hermanoBean.hermano.numKm}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="numKm" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="bloque" value="Bloque" />
+		       		<p:inputText id="bloque" value="#{hermanoBean.hermano.bloque}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="bloque" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="escalera" value="Escalera" />
+		       		<p:inputText id="escalera" value="#{hermanoBean.hermano.escalera}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="escalera" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="piso" value="Piso" />
+		       		<p:inputText id="piso" value="#{hermanoBean.hermano.piso}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="piso" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="puerta" value="Puerta" />
+		       		<p:inputText id="puerta" value="#{hermanoBean.hermano.puerta}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="puerta" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidad" value="Localidad" />
+		       		<p:inputText id="idLocalidad" value="#{hermanoBean.hermano.idLocalidad}" 
+		       			converter="#{localidadConverter}" disabled="true" />
+					<p:message for="idLocalidad" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provincia" value="Provincia" />
+		       		<p:inputText id="provincia" value="#{hermanoBean.hermano.provincia}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostal" value="Código postal" />
+		       		<p:inputText id="codigoPostal" value="#{hermanoBean.hermano.codigoPostal}" disabled="true" />
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="sector" value="Sector" />
+		       		<h:selectOneMenu id="sector" value="#{hermanoBean.hermano.idSector}" disabled="true" >  
+						<f:selectItem itemLabel="-- Seleccionar sector --" itemValue="" />  
+						<f:selectItems value="#{sectorBean.listSector}" var="sector"
+								itemLabel="#{sector.nombre}" itemValue="#{sector.id}"/>  
+					</h:selectOneMenu>
+					<h:message for="sector" display="text" />
+				</p:outputPanel>
+				
+				<!-- <p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidad" value="Localidad" />
+		       		<p:autoComplete id="idLocalidad" value="#{hermanoBean.localidadSelected}"
+						completeMethod="#{hermanoBean.doAutoComplete}" minQueryLength="3"
+						var="localidad" itemLabel="#{localidad.localidad}" 
+						itemValue="#{localidad.id}" converter="#{localidadConverter}">
+						<f:attribute name="filter" value="localidad" />
+						<p:ajax listener="#{hermanoBean.loadAddressFields}" 
+								event="itemSelect" update="provincia, codigoPostal" />
+		                <p:column>  
+		                    #{localidad.localidad} (#{localidad.codigoPostal})
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="idLocalidad" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provincia" value="Provincia" />
+		       		<p:inputText id="provincia" value="#{hermanoBean.hermano.provincia}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostal" value="Código postal" />
+		       		<p:autoComplete id="codigoPostal" value="#{hermanoBean.localidadCPSelected}"
+						completeMethod="#{hermanoBean.doAutoComplete}" minQueryLength="5"
+						var="localidad" itemLabel="#{localidad.codigoPostal}" 
+						itemValue="#{localidad.id}" converter="#{codigoPostalConverter}">
+						<f:attribute name="filter" value="codigoPostal" />
+						<p:ajax listener="#{hermanoBean.loadAddressFields}" 
+								event="itemSelect" update="idLocalidad, provincia" />
+						<p:column>  
+		                    #{localidad.codigoPostal}  (#{localidad.localidad})
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel> -->
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="telefonoFijo" value="Teléfono fijo" />
+		       		<p:inputText id="telefonoFijo" value="#{hermanoBean.hermano.telefonoFijo}" />
+					<p:message for="telefonoFijo" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="telefonoMovil" value="Teléfono móvil" />
+		       		<p:inputText id="telefonoMovil" value="#{hermanoBean.hermano.telefonoMovil}" />
+					<p:message for="telefonoMovil" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="email" value="Email" />
+		       		<p:inputText id="email" value="#{hermanoBean.hermano.email}"
+		       			requiredMessage="No ha introducido un email válido">
+		       			<f:validateRegex 
+			       			pattern="([\w\-\.]+)@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([\w\-]+\.)+)([a-zA-Z]{2,4}))" />
+		       		</p:inputText>
+					<p:message for="email" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombrePadre" value="Nombre del padre" />
+		       		<p:inputText id="nombrePadre" value="#{hermanoBean.hermano.nombrePadre}" />
+					<p:message for="nombrePadre" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreMadre" value="Nombre de la madre" />
+		       		<p:inputText id="nombreMadre" value="#{hermanoBean.hermano.nombreMadre}" />
+					<p:message for="nombreMadre" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreTutor" value="Nombre del tutor" />
+		       		<p:inputText id="nombreTutor" value="#{hermanoBean.hermano.nombreTutor}" />
+					<p:message for="nombreTutor" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaBautismo" value="Fecha de bautismo" />
+		       		<p:calendar id="fechaBautismo" value="#{hermanoBean.hermano.fechaBautismo}" 
+	       				pattern="#{hermanoBean.dateFormat}" required="true"
+	       				requiredMessage="Este campo es obligatorio" showButtonPanel="true" navigator="true" />
+					<p:message for="fechaBautismo" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="lugarBautismo" value="Lugar de bautismo" />
+		       		<p:inputText id="lugarBautismo" value="#{hermanoBean.hermano.lugarBautismo}" />
+					<p:message for="lugarBautismo" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="profesion" value="Profesión" />
+		       		<p:inputText id="profesion" value="#{hermanoBean.hermano.profesion}" />
+					<p:message for="profesion" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="libro" value="Libro" />
+		       		<p:inputText id="libro" value="#{hermanoBean.hermano.libro}" />
+					<p:message for="libro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaSolicitud" value="Fecha de la solicitud" />
+		       		<p:calendar id="fechaSolicitud" value="#{hermanoBean.hermano.fechaSolicitud}" 
+	       				pattern="#{hermanoBean.dateTimeFormat}" required="true"
+	       				requiredMessage="Este campo es obligatorio" showButtonPanel="true" navigator="true" />
+					<p:message for="fechaSolicitud" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaJura" value="Fecha de la jura" />
+		       		<p:calendar id="fechaJura" value="#{hermanoBean.hermano.fechaJura}" 
+	       				pattern="#{hermanoBean.dateTimeFormat}" showButtonPanel="true" navigator="true" />
+					<p:message for="fechaJura" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaBaja" value="Fecha de baja" />
+		       		<p:calendar id="fechaBaja" value="#{hermanoBean.hermano.fechaBaja}"
+		       			pattern="#{hermanoBean.dateTimeFormat}" showButtonPanel="true" navigator="true">
+		       			<p:ajax event="dateSelect" update="element" />
+		       		</p:calendar>
+		       		<p:message for="fechaBaja" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement" 
+						rendered="#{not empty hermanoBean.hermano.fechaBaja}">
+		       		<p:outputLabel for="motivoBaja" value="Motivo de la baja" />
+		       		<p:inputTextarea id="motivoBaja" rows="5" cols="30" maxlength="500"       
+						    counterTemplate="{0} caracteres restantes." autoResize="false"
+						    required="true"
+						    value="#{hermanoBean.hermano.motivoBaja}" />
+				</p:outputPanel>
+				
+				<p:outputPanel id="selectedStatus" layout="block"  styleClass="editionElement">
+		       		<p:outputLabel for="statuses" value="Status" />
+					<p:dataList id="statuses" var="statusPorHermano" rowIndexVar="rowIndex"
+		       			value="#{hermanoBean.listStatusPorHermano}" 
+						rendered="#{not empty hermanoBean.listStatusPorHermano}">
+						
+						<p:outputPanel>
+							<h:outputText value="#{statusPorHermano.id}" 
+									converter="#{statusConverter}" />
+						</p:outputPanel>
+						<p:outputPanel layout="block">
+							<p:commandLink onclick="confirmation.show()" 
+									immediate="true"
+									title="Desvincular status" process="@this">
+								<f:setPropertyActionListener value="#{rowIndex}" 
+										target="#{hermanoBean.selectedDeleteItemId}" />
+								<p:graphicImage value="/resources/img/icons/cross.png" />
+							</p:commandLink>
+							<p:confirmDialog message="¿Está seguro de desvincular el status?"  
+								header="Borrar elemento" severity="alert" widgetVar="confirmation">  
+						        <p:commandLink value="Sí" update=":editionForm:selectedStatus" 
+						        		oncomplete="confirmation.hide();$('.ui-widget-overlay').remove();"
+						                action="#{hermanoBean.doUnlinkStatus}">
+								</p:commandLink>
+						        <p:commandLink value="No" onclick="confirmation.hide()"/>
+						    </p:confirmDialog>
+					    </p:outputPanel>
+			        </p:dataList>
+					<h:message for="statuses" display="text" />
+					
+					<p:commandLink id="idSampleLink" action="#{hermanoBean.loadStatusesList}" type="button">
+						<h:graphicImage value="/resources/img/icons/pencil.png" />
+					</p:commandLink>
+					<h:commandLink action="#{hermanoBean.clearListStatus}" >
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Borrar los status seleccionados"/>
+					</h:commandLink>
+					
+					<p:overlayPanel id="idSamplePanel" for="idSampleLink" hideEffect="fade" dynamic="true"
+							my="right bottom" at="right top">
+						<p:dataTable id="listTableStatus" var="status" value="#{hermanoBean.listUnselectedStatus}">  
+				            <p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Status" />
+				        			
+				        		</f:facet>
+								<h:outputText value="#{status.nombre}" />
+				        	</p:column>
+				        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar status" />
+									
+				        		</f:facet>
+								<h:commandLink action="#{hermanoBean.doSelectStatus}" 
+										title="seleccionar status" immediate="true">
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="idStatus" value="#{status.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="nombreViaCobro" value="Nombre de la vía" />
+		       		<p:inputText id="nombreViaCobro" value="#{hermanoBean.hermano.nombreViaCobro}"
+		       			requiredMessage="Este campo es obligatorio" disabled="true"/>
+					<p:message for="nombreViaCobro" display="text" />
+					
+					<p:commandLink id="idCalleCobroLink" type="button">
+						<h:graphicImage value="/resources/img/icons/zoom.png" />
+					</p:commandLink>
+					<h:commandLink action="#{hermanoBean.clearIdCalleCobro}" >
+						<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar calle"/>
+					</h:commandLink>
+						
+					<p:overlayPanel id="idCalleCobroPanel" for="idCalleCobroLink" hideEffect="fade"
+							dynamic="true" my="right bottom" at="right bottom">
+						<p:dataTable id="listTableCallesCobro" var="calle" onExpandStart="false"
+								value="#{hermanoBean.listSearchCalleCobro}" 
+								filteredValue="#{hermanoBean.listFilteredCallesCobro}"
+								paginator="true" rows="10"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+								rowsPerPageTemplate="10,25,50,100" paginatorPosition="bottom">  
+				            <p:column filterBy="nombreVia" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Calle" />
+				        		</f:facet>
+								<h:outputText value="#{calle.nombreVia}" />
+				        	</p:column>
+				        	
+				        	<p:column filterBy="localidad" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Localidad" />
+				        		</f:facet>
+								<h:outputText value="#{calle.localidad}" />
+				        	</p:column>
+				        	
+				        	<p:column filterBy="provincia" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Provincia" />
+				        		</f:facet>
+								<h:outputText value="#{calle.provincia}" />
+				        	</p:column>
+				        	
+					        <p:column filterBy="pais" filterMatchMode="contains">
+				        		<f:facet name="header">
+				        			<h:outputText value="Pais" />
+				        		</f:facet>
+								<h:outputText value="#{calle.pais}" />
+				        	</p:column>
+					        	
+				        	<p:column>
+				        		<f:facet name="header">
+				        			<h:outputText value="Seleccionar" />
+				        		</f:facet>
+								<h:commandLink action="#{hermanoBean.doSelectCalleCobro}" 
+										title="Seleccionar calle" immediate="true" >
+									<h:graphicImage value="/resources/img/icons/add.png" />
+									<f:param name="id" value="#{calle.id}" />
+								</h:commandLink>
+				        	</p:column>
+				        </p:dataTable>
+				    </p:overlayPanel>
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idTipoViaCobro" value="Tipo de vía (cobro)" />
+		       		<h:selectOneMenu id="idTipoViaCobro" value="#{hermanoBean.hermano.idTipoViaCobro}"
+		       				requiredMessage="Este campo es obligatorio" disabled="true" >  
+						<f:selectItem itemLabel="-- Seleccionar tipo de via --" itemValue="" />  
+						<f:selectItems value="#{tipoViaBean.listTipoVia}" var="tipoVia"
+								itemLabel="#{tipoVia.nombre}" itemValue="#{tipoVia.id}"/>  
+					</h:selectOneMenu>
+					<p:message for="idTipoViaCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="numKmCobro" value="Num/KM (cobro)" />
+		       		<p:inputText id="numKmCobro" value="#{hermanoBean.hermano.numKmCobro}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="numKmCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="bloqueCobro" value="Bloque (cobro)" />
+		       		<p:inputText id="bloqueCobro" value="#{hermanoBean.hermano.bloqueCobro}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="bloqueCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="escaleraCobro" value="Escalera (cobro)" />
+		       		<p:inputText id="escaleraCobro" value="#{hermanoBean.hermano.escalera}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="escaleraCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="pisoCobro" value="Piso (cobro)" />
+		       		<p:inputText id="pisoCobro" value="#{hermanoBean.hermano.pisoCobro}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="pisoCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="puertaCobro" value="Puerta ()cobro" />
+		       		<p:inputText id="puertaCobro" value="#{hermanoBean.hermano.puertaCobro}"
+		       			requiredMessage="Este campo es obligatorio" maxlength="5" />
+					<p:message for="puertaCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidadCobro" value="Localidad de cobro" />
+		       		<p:inputText id="idLocalidadCobro" value="#{hermanoBean.hermano.idLocalidadCobro}" 
+		       			converter="#{localidadConverter}" disabled="true" />
+					<p:message for="idLocalidadCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provinciaCobro" value="Provincia de cobro" />
+		       		<p:inputText id="provinciaCobro" value="#{hermanoBean.hermano.provinciaCobro}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostalCobro" value="Código postal de cobro" />
+		       		<p:inputText id="codigoPostalCobro" value="#{hermanoBean.hermano.codigoPostalCobro}" disabled="true" />
+					<p:message for="codigoPostalCobro" display="text" />
+				</p:outputPanel>
+				
+				<!-- <p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="idLocalidadCobro" value="Localidad de cobro" />
+		       		<p:autoComplete id="idLocalidadCobro" value="#{hermanoBean.localidadCobroCPSelected}"
+						completeMethod="#{hermanoBean.doAutoComplete}" minQueryLength="4"
+						var="localidadCobro" itemLabel="#{localidadCobro.localidad}" 
+						itemValue="#{localidadCobro.id}" converter="#{localidadConverter}">
+						<f:attribute name="filter" value="localidad" />
+						<p:ajax listener="#{hermanoBean.loadAddressCobroFields}" 
+								event="itemSelect" update="provinciaCobro, codigoPostalCobro" />
+						<p:column>  
+		                    #{localidadCobro.localidad} (#{localidadCobro.codigoPostal})  
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="idLocalidadCobro" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="provinciaCobro" value="Provincia de cobro" />
+		       		<p:inputText id="provinciaCobro" value="#{hermanoBean.hermano.provinciaCobro}" disabled="true" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="codigoPostalCobro" value="Código postal de cobro" />
+		       		<p:autoComplete id="codigoPostalCobro" value="#{hermanoBean.localidadCobroSelected}"
+						completeMethod="#{hermanoBean.doAutoComplete}" minQueryLength="5"
+						var="localidadCobro" itemLabel="#{localidadCobro.codigoPostal}" 
+						itemValue="#{localidadCobro.id}" converter="#{codigoPostalConverter}">
+						<f:attribute name="filter" value="codigoPostal" />
+						<p:ajax listener="#{hermanoBean.loadAddressCobroFields}" 
+								event="itemSelect" update="idLocalidadCobro, provinciaCobro" />
+						<p:column>  
+		                    #{localidadCobro.codigoPostal}  
+		                </p:column>
+					</p:autoComplete>
+					<p:message for="codigoPostal" display="text" />
+				</p:outputPanel> -->
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="observaciones" value="Observaciones" />
+		       		<p:inputTextarea id="observaciones" rows="5" cols="30"
+		       			counter="counterObservaciones" maxlength="2000"       
+					    counterTemplate="{0} caracteres restantes." autoResize="false"
+					    value="#{hermanoBean.hermano.observaciones}"
+					    requiredMessage="Este campo es obligatorio" />
+					<p:message for="observaciones" display="text" showSummary="false" />
+					<h:outputText id="counterObservaciones" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{hermanoBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{hermanoBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

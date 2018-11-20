@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+ 	
+ 	
+ 
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<resource-bundle>
+			<base-name>properties.Messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>properties.infoCofradeConfig</base-name>
+			<var>infoCofradeConfig</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>properties.infoCofradeStaticConfig</base-name>
+			<var>infoCofradeStaticConfig</var>
+		</resource-bundle>
+		
+		<!--
+		<locale-config>
+			<default-locale>es_US</default-locale>
+			<supported-locale>es_ES</supported-locale>
+			<supported-locale>en_US</supported-locale>
+		</locale-config>
+		<message-bundle>properties.NavigationBundle</message-bundle>-->
+	</application>
+	
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/pages/home.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>index</from-outcome>
+			<to-view-id>index.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/home.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/home.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<lifecycle>
+		<!-- Permit messages context between different pages -->
+		<phase-listener>com.infoCofrade.common.bean.MultiPageMessagesSupport</phase-listener>
+	</lifecycle>
+</faces-config>

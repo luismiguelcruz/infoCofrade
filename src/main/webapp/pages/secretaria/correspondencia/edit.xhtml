@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="header">
+    		
+    </ui:define>
+    
+    <ui:define name="content">
+		<h:form id="editionForm" enctype="multipart/form-data">
+			<h:outputText value="Edición de correspondencia" styleClass="pageTitle" />
+		
+			<p:fieldset id="element" legend="Correspondencia">
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="remitente" value="Remitente" />
+		       		<p:inputText id="remitente" value="#{correspondenciaBean.correspondencia.remitente}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" />
+					<p:message for="remitente" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="receptor" value="Receptor" />
+		       		<p:inputText id="receptor" value="#{correspondenciaBean.correspondencia.receptor}" 
+		       			required="true"	requiredMessage="Este campo es obligatorio" />
+					<p:message for="receptor" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaEntrada" value="Fecha de entrada" />
+		       		<p:calendar id="fechaEntrada" value="#{correspondenciaBean.correspondencia.fechaEntrada}" 
+	       				pattern="#{correspondenciaBean.dateTimeFormat}" showButtonPanel="true" 
+	       				navigator="true" />
+					<p:message for="fechaEntrada" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="fechaSalida" value="Fecha de salida" />
+		       		<p:calendar id="fechaSalida" value="#{correspondenciaBean.correspondencia.fechaSalida}" 
+	       				pattern="#{correspondenciaBean.dateTimeFormat}" />
+					<p:message for="fechaSalida" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<p:outputLabel for="asunto" value="Asunto" />
+		       		<p:inputText id="asunto" value="#{correspondenciaBean.correspondencia.asunto}" />
+					<p:message for="asunto" display="text" />
+				</p:outputPanel>
+				
+				<p:outputPanel layout="block" styleClass="editionElement">
+		       		<h:outputLabel for="idGrupo" value="Grupo" />
+		       		<h:selectOneMenu id="idGrupo" value="#{correspondenciaBean.correspondencia.idGrupo}">  
+						<f:selectItem itemLabel="-- Seleccionar grupo --" itemValue="" />  
+						<f:selectItems value="#{grupoBean.listGrupo}" var="grupo"
+								itemLabel="#{grupo.nombre}" itemValue="#{grupo.id}"/>  
+					</h:selectOneMenu>
+					<h:message for="idGrupo" display="text" />
+				</p:outputPanel>
+			</p:fieldset>
+			
+			<p:outputPanel layout="block" styleClass="actions">
+				<h:commandLink action="#{correspondenciaBean.doCreateElement}" value="Guardar" />
+				<h:commandLink action="#{correspondenciaBean.doNavigate}" value="Volver sin guardar" immediate="true"/>
+			</p:outputPanel>
+		</h:form>
+    </ui:define>
+ 
+</ui:composition>
+</html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+	
+	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet library="css" name="styles.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="http://blog.meetcody.com/wp-content/themes/standard/appstyle.css" /> -->
+		
+		<ui:insert name="head" />
+		<title><ui:insert name="title" /></title>
+		<script type="text/javascript">  
+		    function startDownloadFileDialog() {
+		        statusDownloadFileDialog.show();
+		    }  
+		
+		    function stopDownloadFileDialog() {  
+		        statusDownloadFileDialog.hide();  
+		    }
+
+		    function handleLoginRequest(xhr, status, args) {  
+		        if(args.validationFailed || !args.loggedIn) {  
+		            dlg.jq.effect("shake", { times:5 }, 100);  
+		        }   
+		        else {  
+		            dlg.hide();  
+		            $('#loginLink').fadeOut();  
+		        }  
+		    }
+		</script>
+	</h:head>
+	
+	<h:body>
+		<f:view>
+		    <f:loadBundle basename="properties.Messages" var="msg" />
+		</f:view>
+	    <div id="wrapper" class="wrapper"> 
+	    	<p:outputPanel layout="block" id="header-section" rendered="#{loginBean.isUserLogged}">
+	        	<h:outputText value="INFO COFRADE" styleClass="tituloWeb" />
+	        </p:outputPanel>
+	     
+	        <div id="content">
+	        	<h:form id="messagesForm">
+	        		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" globalOnly="true" />
+	        		
+	        		<!-- Dialog to download files -->
+	        		<p:dialog modal="true" widgetVar="statusDownloadFileDialog" header="Status" 
+					    	draggable="false" closable="false" resizable="false"
+					    	dynamic="true" hideEffect="explode">
+						<p:graphicImage value="/resources/img/gifs/ajaxLoadingBar.gif" />
+					</p:dialog>
+	        	</h:form>
+	        	
+	        	<h:form id="loginForm">
+	        		<h:outputText value="INFO COFRADE SU" 
+			        	style="display:block; width: 100%; font-size: x-large; text-align: center;
+			        	margin: 2em 0;" />
+	        	
+					<h:panelGrid columns="2" cellpadding="5">
+			            <h:outputLabel for="nickname" value="Usuario:" />  
+			            <p:inputText value="#{loginBean.userView.username}"   
+			                    id="nickname" required="true" />
+			              
+			            <h:outputLabel for="password" value="Contraseña:" />  
+			            <h:inputSecret value="#{loginBean.userView.md5Password}"   
+			                    id="password" required="true" />
+						
+						<!-- <p:outputPanel layout="block">
+				       		<p:outputLabel for="idHermandad" value="Hermandad" />
+				       		<p:selectOneMenu id="idHermandad" value="#{loginBean.idHermandadSelected}" 
+				       				effect="fade">  
+								<f:selectItem itemLabel="Seleccionar" itemValue="" />  
+								<f:selectItems value="#{hermandadBean.listHermandad}" var="hermandad"
+										itemLabel="#{hermandad.nombreCorto}" itemValue="#{hermandad.id}"/>  
+							</p:selectOneMenu>
+							<p:message for="idHermandad" display="text" />
+						</p:outputPanel> -->
+						
+						<p:outputPanel id="selectHermandad" layout="block">
+				       		<h:outputLabel for="idHermandadSelected" value="Hermandad" />
+							<h:outputText id="idHermandadSelected" value="#{loginBean.hermandadSelected.nombreCorto}" />
+							<h:message for="idHermandadSelected" display="text" />
+							
+							<p:commandLink id="idHermandadLink" type="button">
+								<h:graphicImage value="/resources/img/icons/pencil.png" />
+							</p:commandLink>
+							<p:commandLink action="#{loginBean.clearHermandadSelected}"
+									immediate="true" update=":loginForm:selectHermandad">
+								<h:graphicImage value="/resources/img/icons/cross.png" alt="Limpiar la hermandad seleccionada"/>
+							</p:commandLink>
+						
+							<p:overlayPanel for="idHermandadLink" hideEffect="fade"
+									dynamic="true" my="right bottom" at="right top">
+								<p:dataTable id="listTableSamples" var="hermandad" 
+										value="#{loginBean.listHermandad}">
+									<p:column sortBy="codigo" filterBy="codigo" filterMatchMode="contains">
+						        		<f:facet name="header">
+						        			<h:outputText value="Codigo hermandad" />
+						        		</f:facet>
+										<h:outputText value="#{hermandad.codigo}" />
+						        	</p:column>
+									 
+						            <p:column sortBy="nombreCorto" filterBy="nombreCorto" filterMatchMode="contains">
+						        		<f:facet name="header">
+						        			<h:outputText value="Nombre" />
+						        		</f:facet>
+										<h:outputText value="#{hermandad.nombreCorto}" />
+						        	</p:column>
+						        	
+						        	<p:column>
+						        		<f:facet name="header">
+						        			<h:outputText value="Localidad" />
+						        		</f:facet>
+										<h:outputText value="#{hermandad.idLocalidad}"
+												converter="#{localidadConverter}" />
+						        	</p:column>
+						        	
+						        	<p:column sortBy="fechaUltimoPago">
+						        		<f:facet name="header">
+						        			<h:outputText value="Fecha ultimo pago" />
+						        		</f:facet>
+										<h:outputText value="#{hermandad.fechaUltimoPago}">
+											<f:convertDateTime pattern="#{loginBean.dateFormat}" />
+										</h:outputText>
+						        	</p:column>
+						        	
+						        	<p:column>
+						        		<f:facet name="header">
+						        			<h:outputText value="Select Sample" />
+											
+						        		</f:facet>
+										<p:commandLink action="#{loginBean.doSelectHermandad}" 
+												title="Seleccionar hermandad" immediate="true"
+												update=":loginForm:selectHermandad">
+											<h:graphicImage value="/resources/img/icons/add.png" />
+											<f:param name="idHermandad" value="#{hermandad.id}" />
+										</p:commandLink>
+						        	</p:column>
+						        </p:dataTable>
+						    </p:overlayPanel>
+						</p:outputPanel>
+			              
+			            <f:facet name="footer">  
+			                <p:commandButton id="loginButton" value="Login"    
+			                    action="#{loginBean.doLogin}" update=":header-section"
+			                    oncomplete="handleLoginRequest(xhr, status, args)"/>
+			                <h:commandLink value="Crear contenido base de datos"  
+			                    action="#{loginBean.doCreateDataBaseStructure}" />
+			            </f:facet>  
+			        </h:panelGrid>
+	        	</h:form>
+	        </div>
+	             
+	        <div id="footer">
+	        </div>
+	    </div>
+	</h:body>
+</html>
